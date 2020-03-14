@@ -5,5 +5,5 @@
 </template>
 
 <style lang="less">
-@import './fonts/font.css';
+
 </style>

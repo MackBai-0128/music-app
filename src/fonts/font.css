@@ -9,7 +9,7 @@
         url('https://at.alicdn.com/t/font_1690863_x8ayapgky3.svg#iconfont') format('svg');
 }
 
-.iconfont {
+[class^="icon-"], [class*=" icon-"] {
     font-family: "iconfont" !important;
     font-size: 16px;
     font-style: normal;
@@ -75,6 +75,8 @@
 
 .icon-tinggeshiqu40x40:before {
     content: "\e6e8";
+    color: #666;
+
 }
 
 .icon-guanyu:before {
