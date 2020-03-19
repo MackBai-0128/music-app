@@ -34,8 +34,35 @@ const routes = [
         path: 'account',
         name: 'account',
         component: () => import('@/views/account')
+      },
+      {
+        path: '/search/:name?',
+        name: 'search',
+        component: () => import('@/views/search')
+      },
+      {
+        path: '/search-result/:name',
+        name: 'search-result',
+        component: () => import('@/views/search-result'),
+        props: true
+      },
+      {
+        path: '/songlist/:id',
+        name: 'songlist',
+        component: () => import('@/views/song-list'),
+        props: true
       }
     ]
+  },
+  {
+    path: '/play',
+    name: 'play',
+    component: () => import('@/views/play-page')
+  },
+  {
+    path: '/load',
+    name: 'load',
+    component: () => import('@/views/first-load')
   }
 ]
 

@@ -2,7 +2,7 @@
  * @Author: MackBai
  * @Date: 2020-03-14 14:52:12
  * @LastEditors: MackBai
- * @LastEditTime: 2020-03-14 16:32:41
+ * @LastEditTime: 2020-03-14 18:57:52
  * @FilePath: /music-app/src/utils/request.js
  * @Description: axios
  */
@@ -14,6 +14,7 @@ const request = axios.create({
 // 请求
 request.interceptors.request.use(
   function (config) {
+    // config.headers.xhrFields = { withCredentials: true }
     return config
   },
   function (err) {
@@ -30,4 +31,17 @@ request.interceptors.response.use(
   }
 )
 
-export default request
+export const musicAPI = (url, method, data = {}) => {
+  var config = {}
+  if (method === 'GET') {
+    config.params = data
+  } else {
+    config.data = data
+  }
+
+  return request({
+    url,
+    method,
+    ...config
+  })
+}
