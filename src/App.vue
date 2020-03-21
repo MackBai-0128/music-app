@@ -8,7 +8,6 @@
   </div>
 </template>
 <script>
-// import vAudio from ''
 import firstLoad from './views/first-load'
 export default {
   data () {
@@ -26,7 +25,7 @@ export default {
       this.isShow = true
       this.timer = setTimeout(() => {
         this.isShow = false
-      }, 2000)
+      }, 5000)
     }
   },
   created () {

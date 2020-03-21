@@ -1,7 +1,7 @@
 <template>
   <div class="first-load">
     <div class="logo">
-      <span class="name">MackBai-制作</span>
+      <span class="name">MackBai-制作-正在进入{{index}}...</span>
       <img :src="img" class="logo" />
       <img :src="icon" class="icon" />
     </div>
@@ -15,16 +15,40 @@ export default {
   data () {
     return {
       img: require('@/assets/img/music.png'),
-      icon: require('@/assets/img/icon-logo.png')
+      icon: require('@/assets/img/icon-logo.png'),
+      timer: null,
+      index: 5
     }
   },
   components: {},
   watch: {},
   filters: {},
-  methods: {},
-  created () {},
+  methods: {
+    timeOut () {
+      this.timer = setInterval(() => {
+        if (this.index === 0) {
+          clearInterval(this.timer)
+          this.timer = null
+          return
+        }
+        this.loading()
+      }, 1000)
+    },
+    loading () {
+      this.index--
+    }
+  },
+  created () {
+    this.timeOut()
+  },
   mounted () {},
-  computed: {}
+  computed: {},
+  beforeDestroy () {
+    // if (this.index === 0) {
+    //   clearInterval(this.timer)
+    //   this.timer = null
+    // }
+  }
 }
 </script>
 
@@ -38,13 +62,13 @@ export default {
     width: 100vw;
     height: 100vh;
     .name {
-        font-size: 12px;
-        font-weight: 200;
-        color: #fff;
-        position: absolute;
-        left: 50%;
-        transform: translateX(-40%);
-        bottom: 30px;
+      font-size: 12px;
+      font-weight: 200;
+      color: #fff;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-40%);
+      bottom: 30px;
     }
     .logo {
       width: 64vw;

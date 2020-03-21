@@ -19,7 +19,8 @@ import {
   Dialog,
   Toast,
   Tab,
-  Tabs
+  Tabs,
+  ActionSheet
 } from 'vant'
 
 Vue.use(Tabbar)
@@ -42,3 +43,4 @@ Vue.use(Tabbar)
   .use(Toast)
   .use(Tab)
   .use(Tabs)
+  .use(ActionSheet)

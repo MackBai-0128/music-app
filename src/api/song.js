@@ -2,7 +2,7 @@
  * @Author: MackBai
  * @Date: 2020-03-15 16:02:20
  * @LastEditors: MackBai
- * @LastEditTime: 2020-03-19 14:37:36
+ * @LastEditTime: 2020-03-20 11:58:17
  * @FilePath: /music-app/src/api/song.js
  * @Description: 歌曲
  */
@@ -24,6 +24,8 @@ export const hotPlaylist = () => musicAPI('/playlist/hot', 'GET')
 export const related = data => musicAPI(`/related/playlist?id=${data.id}`, 'GET')
 // 获取歌单详情
 export const playlist = data => musicAPI(`/playlist/detail?id=${data.id}`, 'GET')
+// 获取歌曲详情
+export const songdetail = data => musicAPI(`/song/detail?ids=${data.id}`, 'GET')
 // 音乐是否可用
 // 传入歌曲 id, 可获取音乐是否可用,返回 { success: true, message: 'ok' } 或者 { success: false, message: '亲爱的,暂无版权' }
 export const check = data => musicAPI(`/check/music?id=${data.id}`, 'GET')

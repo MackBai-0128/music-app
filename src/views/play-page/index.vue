@@ -1,7 +1,9 @@
 <template>
   <div class="play-page">
     <div class="bg-img">
-      <img :src="$store.state.currentSong?$store.state.currentSong.artists[0].img1v1Url:''" />
+      <img
+        :src="JSON.stringify($store.state.currentSong) !== '{}'?$store.state.artists.picUrl:defaultImg"
+      />
     </div>
     <div class="play-container">
       <!-- nav -->
@@ -19,8 +21,19 @@
         <i class="icon-fenxiang fenxiang"></i>
       </div>
       <!-- logo -->
-      <div class="cover animation" :class="isPlay?'running':'paused'">
-        <img :src="isCurrent" alt />
+      <div
+        @click="isLogoLyric = false"
+        v-if="isLogoLyric"
+        class="cover animation"
+        :class="isPlay?'running':'paused'"
+      >
+        <img
+          :src="JSON.stringify($store.state.currentSong) !== '{}'?$store.state.artists.picUrl:defaultImg"
+        />
+      </div>
+      <!-- 歌词 -->
+      <div @click="isLogoLyric = true" v-else>
+        <v-lyric class="v-lyric" :lyric="lyRic" :lyricIndex="lyricIndex" :nolyric="nolyric" />
       </div>
       <!-- 操作区 -->
       <div class="features">
@@ -60,34 +73,46 @@
 </template>
 
 <script>
+import Lyric from 'lyric-parser'
 import eventBus from '@/utils/eventBus'
-import { songURL } from '@/api/song'
+import { songURL, songdetail, lyric } from '@/api/song'
 import axios from 'axios'
+import vLyric from '@/components/lyric/lyric'
 export default {
   name: 'playPage',
   props: {},
   data () {
     return {
-      defaultImg: require('@/assets/img/default.jpg'),
-      current: this.$store.state.currentSong,
+      defaultImg: require('@/assets/img/timg.jpeg'),
       cycle: 1,
       isPlay: false,
       isLike: false,
       duration: 0,
-      du: 30
-      // currentTim: this.$store.state.currentTime
+      du: 30,
+      artists: {},
+      lyRic: [], // 歌词
+      nolyric: false, // 是否有歌词
+      lyricIndex: 0, // 当前播放歌词下标
+      isLogoLyric: true,
+      currentTime: 0
     }
   },
   components: {
-    // vAudio
-    // Downloader
+    vLyric
+    // betterScroll
   },
   watch: {
-    current: {
-      handler (val, oldVal) {
-        console.log(val)
-      },
-      deep: true
+    currentTime (val) {
+      if (this.nolyric) {
+        return
+      }
+      var lyricIndex = 0
+      for (var i = 0; i < this.lyRic.length; i++) {
+        if (val * 1000 >= (this.lyRic[i].time)) {
+          lyricIndex = i
+        }
+        this.lyricIndex = lyricIndex
+      }
     },
     audio: {
       handler () {
@@ -110,13 +135,29 @@ export default {
     }
   },
   methods: {
+    // 获取歌词
+    async getlyric (id) {
+      try {
+        const { data } = await lyric(id)
+        this.lyRic = new Lyric(data.lrc.lyric).lines
+        this.nolyric = false
+      } catch (error) {
+        this.nolyric = true
+      }
+    },
+    // 获取歌曲详情
+    async getSongDetail (id) {
+      const { data } = await songdetail({ id })
+      this.artists = data.songs[0].al
+    },
     // 下载
     onDownload () {
       axios({
         method: 'get',
         url: this.$store.state.flie.url,
         responseType: 'blob'
-      }).then((res) => {
+      }).then(res => {
+        console.log(res)
         if (!res) {
           return
         }
@@ -124,9 +165,14 @@ export default {
         const link = document.createElement('a')
         link.style.display = 'none'
         link.href = url
-        link.setAttribute('download', this.$store.state.currentSong.name + '.' + this.$store.state.flie.type)
+        link.setAttribute(
+          'download',
+          this.$store.state.currentSong.name + '.' + this.$store.state.flie.type
+        )
         document.body.appendChild(link)
         link.click()
+        // 下载完毕后删除节点
+        document.body.removeChild(link)
       })
     },
     // 滑动条
@@ -183,9 +229,24 @@ export default {
   },
 
   created () {
+    // 获取新歌词
+    eventBus.$on('onLyric', id => {
+      console.log(id)
+      this.getlyric(id)
+    })
+    eventBus.$on('getLyric', item => {
+      this.currentTime = item
+    })
+    this.getSongDetail(this.$store.state.currentSong.id)
+    this.getlyric(this.$store.state.currentSong.id)
     this.isPlay = this.$store.state.isPlay
   },
   mounted () {
+    // console.log(document.getElementById('wrapper'))
+    eventBus.$on('waiting', id => {
+      this.getSongDetail(id)
+      this.getlyric(id)
+    })
     eventBus.$on('onPlaySonglist', item => {
       console.log(item)
       // this.getUrl(item.id)
@@ -201,9 +262,14 @@ export default {
   },
   computed: {
     isCurrent () {
-      return this.$store.state.currentSong
-        ? this.$store.state.currentSong.artists[0].img1v1Url
-        : this.defaultImg
+      if (this.$store.state.currentSong) {
+        if (this.$store.state.currentSong.artists[0].img) {
+          return this.$store.state.currentSong.artists[0].img
+        } else if (this.$store.state.currentSong.album.img) {
+          return this.$store.state.currentSong.album.img
+        }
+      }
+      return this.defaultImg
     }
   }
 }
@@ -229,9 +295,10 @@ export default {
   bottom: 0;
   z-index: -1;
   overflow: hidden;
-  background-color: #999999;
+  // background: linear-gradient(to bottom, #fff, #000);
   img {
-    filter: blur(30px);
+    height: 120vh;
+    filter: blur(40px);
     width: 100vw;
     height: 100vh;
   }
@@ -269,25 +336,36 @@ export default {
     font-size: 20px;
   }
 }
+// 封面
 .cover {
+  box-sizing: border-box;
   width: 200px;
   height: 200px;
   border-radius: 50%;
   overflow: hidden;
   border: 2px solid #fafafa;
   img {
-    min-width: 200px;
-    min-height: 200px;
-    height: auto;
-    width: auto;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 }
+.on-lyric {
+  height: 20px;
+  color: #fff;
+}
+
 .animation {
   animation: myRotate 20s linear infinite;
 }
 
+.v-lyric {
+  // height: 20px;
+}
+
 .features {
   height: 190px;
+  background-color: rgba(65, 65, 65, 0.377);
   i {
     color: #ece4e5 !important;
   }

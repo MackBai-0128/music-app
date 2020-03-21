@@ -15,13 +15,12 @@
 </template>
 
 <script>
-import { songURL } from '@/api/song'
+import { songURL, songdetail } from '@/api/song'
 import eventBus from '@/utils/eventBus'
 import { setItem, getItem } from '@/utils/storage'
 export default {
   name: 'audioPage',
-  props: {
-  },
+  props: {},
   data () {
     return {
       audio: {
@@ -47,7 +46,8 @@ export default {
         // 不要快进按钮
         noSpeed: false
       },
-      current: getItem('currentIndex') ? getItem('currentIndex') : 0
+      current: getItem('currentIndex') ? getItem('currentIndex') : 0,
+      artists: {}
     }
   },
   components: {},
@@ -67,7 +67,10 @@ export default {
       this.$refs.audio.src = data.data[0].url
       setItem('currentIndex', this.current)
       this.$store.commit('setFile', data.data[0])
-      this.$store.commit('setCurrentSong', this.$store.state.playlist[this.current])
+      this.$store.commit(
+        'setCurrentSong',
+        this.$store.state.playlist[this.current]
+      )
       this.$refs.audio
         .play()
         .then(() => {
@@ -75,7 +78,9 @@ export default {
           this.$store.commit('isPlay', true)
         })
         .catch(err => {
-          console.dir('报错了', err)
+          console.dir('没有权限，播放下一首', err)
+          this.current++
+          this.getSong(this.$store.state.playlist[this.current].id)
           eventBus.$emit('onPlay', false)
           this.$store.commit('isPlay', false)
         })
@@ -94,29 +99,37 @@ export default {
     // 获取总时长
     getDuration () {
       // 此时可以获取到duration
-      // this.duration = ~~this.$refs.audio.duration
+      // console.log(this.$refs.audio.duration * 1000)
       this.$store.commit('getmaxTime', ~~this.$refs.audio.duration)
     },
     // 获取播放进度
     onTimeupdate (e) {
       this.audio.currentTime = ~~e.target.currentTime
+      eventBus.$emit('getLyric', e.target.currentTime)
+      eventBus.$emit('bu')
     },
     // 错误回调
     onError () {
       console.log('onError歌曲播放错误')
     },
     // 播放帧
-    onWaiting () {
+    async onWaiting () {
       console.log('waiting')
+      const { data } = await songdetail({ id: this.$store.state.currentSong.id })
+      this.artists = data.songs[0].al
+      this.$store.commit('setArtists', data.songs[0].al)
+      eventBus.$emit('onLyric', this.$store.state.currentSong.id)
     },
     // 暂停
     onPause () {
-      console.log('暂停onPause')
       eventBus.$emit('onPlay', false)
     }
   },
 
   created () {
+    eventBus.$on('Currently', () => {
+      this.onWaiting()
+    })
     this.$nextTick().then(() => {
       eventBus.$on('isPlayOnPause', () => {
         if (!this.$refs.audio.src) {
@@ -154,13 +167,6 @@ export default {
     })
   },
   mounted () {
-    // 下载
-    // eventBus.$on('download', () => {
-    //   console.log('下载')
-    //   console.log(this.$refs.audio.src)
-
-    //   this.$refs.audio.download = true
-    // })
     // 传值播放
     eventBus.$on('play', id => {
       this.current = 0

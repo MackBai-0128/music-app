@@ -134,30 +134,24 @@ export default {
       }
       var newVal = val.toString()
       if (val > 9999) {
-        newVal = newVal.split('').reverse().slice(4).reverse().join('')
+        newVal = newVal
+          .split('')
+          .reverse()
+          .slice(4)
+          .reverse()
+          .join('')
         newVal = newVal + '万'
       }
       return newVal
     }
   },
   methods: {
-    // changeNumber (val) {
-    //   console.log(val)
-    //   var newVal = val.toString()
-    //   if (val > 9999) {
-    //     // .reverse().join('')
-    //     newVal = newVal.split('')
-    //     console.log(newVal)
-    //   }
-    //   console.log(newVal)
-    // },
     // 查看全部歌曲
     viewAllSongs () {
       console.log('viewAllSongs')
     },
     // 播放全部
     onPlayAll () {
-      console.log(this.songsList)
       this.$store.commit('setPlayList', this.songsList)
       this.$router.push('/play')
       eventBus.$emit('play')
@@ -171,7 +165,8 @@ export default {
     getSongs () {}
   },
   created () {},
-  mounted () {},
+  mounted () {
+  },
   computed: {}
 }
 </script>
@@ -212,6 +207,10 @@ export default {
       .left {
         .title {
           font-size: 14px;
+          width: 80vw;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
         }
         .singer {
           display: flex;

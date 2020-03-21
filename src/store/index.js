@@ -7,9 +7,10 @@ export default new Vuex.Store({
   state: {
     currentSong: getItem('current') ? getItem('current') : 0, // 正在播放
     playlist: getItem('playlist') ? getItem('playlist') : [], // 播放列表
+    artists: getItem('currently') ? getItem('currently') : {},
     flie: {},
     isPlay: false,
-    currentTime: 0,
+    currentTime: 0, // 当前播放时间
     maxTime: 0
   },
   mutations: {
@@ -51,6 +52,11 @@ export default new Vuex.Store({
     },
     setFile (state, data) {
       state.flie = data
+    },
+    // 歌曲详情
+    setArtists (state, data) {
+      state.artists = data
+      setItem('currently', state.artists)
     }
   },
   actions: {

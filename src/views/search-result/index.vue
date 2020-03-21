@@ -11,7 +11,7 @@
     <van-tabs v-model="active" :border="false">
       <van-tab title="综合">
         <keep-alive>
-          <composite :songs="songs" :album="album" :artist="artist"/>
+          <composite :songs="songs" :album="album" :artist="artist" />
         </keep-alive>
       </van-tab>
       <van-tab title="单曲">内容 2</van-tab>
@@ -73,13 +73,39 @@ export default {
       this.$router.push('/search/clear')
     },
     async onSearch () {
+      var songs = []
+      var obj = {}
+      var album = {} // 专辑
+      var arr = []
+      var artists = {} // 艺术家
       this.$toast.loading({
         message: '加载中...',
         forbidClick: true
       })
       try {
         const { data } = await search({ value: this.name })
-        this.songs = data.result.songs
+        data.result.songs.forEach(item => {
+          obj.id = item.id
+          obj.name = item.name
+          // 专辑
+          album.name = item.album.name
+          album.id = item.album.id
+          obj.album = album
+          // 艺术家
+          item.artists.forEach(item2 => {
+            artists.id = item2.id
+            artists.name = item2.name
+            artists.img = item2.img1v1Url
+            arr.push(artists)
+            artists = {}
+          })
+          obj.artists = arr
+          songs.push(obj)
+          arr = []
+          obj = {}
+          album = {}
+        })
+        this.songs = songs
         this.$toast.success('加载成功')
       } catch (error) {
         this.$toast.fail('加载失败')
@@ -87,7 +113,6 @@ export default {
     },
     async getSearchAll () {
       const { data } = await searchMultimatch(this.name)
-      console.log(data.result)
       this.album = data.result.album
       this.artist = data.result.artist
     }
@@ -98,12 +123,6 @@ export default {
   },
   mounted () {},
   computed: {}
-  // beforeRouteEnter (to, from, next) {
-  //   console.log(from.params.name)
-  //   if (from.params) {
-  //   }
-  //   next()
-  // }
 }
 </script>
 

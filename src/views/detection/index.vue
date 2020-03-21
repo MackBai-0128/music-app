@@ -21,7 +21,7 @@
           :stroke-width="60"
         >
           <div slot="default" class="now-playing animation">
-            <img :src="$store.state.currentSong.artists[0].img1v1Url" alt />
+            <img :src="$store.state.currentSong?$store.state.artists.picUrl:''" alt />
           </div>
         </van-circle>
       </div>
@@ -171,7 +171,8 @@ export default {
       currentRate: 60,
       rate: '50%',
       banners: [1, 2],
-      recommend: []
+      recommend: [],
+      alImg: ''
     }
   },
   components: {},
@@ -225,7 +226,8 @@ export default {
     this.getNewSong()
     this.getHotPlayList()
   },
-  mounted () {},
+  mounted () {
+  },
   computed: {}
 }
 </script>

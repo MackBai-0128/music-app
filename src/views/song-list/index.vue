@@ -16,8 +16,8 @@
           :rate="rate"
           :stroke-width="60"
         >
-          <div slot="default" class="now-playing animation">
-            <img :src="$store.state.currentSong.artists[0].img1v1Url" alt />
+          <div slot="default" class="now-playing animation" v-if="JSON.stringify($store.state.currentSong) !== '{}'">
+            <img :src="$store.state.artists.picUrl"/>
           </div>
         </van-circle>
       </div>
@@ -99,7 +99,7 @@
       </div>
       <div class="playlist-container">
         <ul class="playlist-content">
-          <li @click="onPlay(item)" class="list-item" v-for="(item,index) in tracks" :key="item.id">
+          <li @click="onPlay(index)" class="list-item" v-for="(item,index) in tracks" :key="item.id">
             <div class="play-serial">{{index+1}}</div>
             <div class="play-title">
               <div class="title">
@@ -153,6 +153,7 @@ export default {
       currentRate: 60,
       rate: '50%',
       tracks: [],
+      songs: [],
       Favorite: 0,
       cover: '',
       playlist: {},
@@ -176,25 +177,53 @@ export default {
     onMv (item) {
       console.log('MV开发中。。。', item)
     },
-    onPlay (item) {
-      // console.log(item)
-      eventBus.$emit('onPlaySong', item)
+    onPlay (index) {
+      this.$store.commit('setPlayList', [this.songs[index]])
+      eventBus.$emit('play', this.songs[index].id)
       this.$router.push('/play')
     },
     onPlayAll () {
-      // console.log('播放全部', this.tracks)
-      // this.$store.commit('setPlayList', this.tracks)
-      eventBus.$emit('onPlaySonglist', this.tracks)
+      this.$store.commit('setPlayList', this.songs)
       this.$router.push('/play')
+      eventBus.$emit('play')
     },
     async getSongList (id) {
+      var songs = []
+      var obj = {}
+      var album = {} // 专辑
+      var arr = []
+      var artists = {} // 艺术家
+      // 专辑 ： al
+      // 艺术家：ar
       const { data } = await playlist({ id })
-      this.Favorite = data.playlist.subscribedCount
+      data.playlist.tracks.forEach(item => {
+        obj.id = item.id
+        obj.name = item.name
+        // 专辑
+        album.name = item.al.name
+        album.id = item.al.id
+        album.img = item.al.picUrl
+        // 专辑
+        obj.album = album
+        // 艺术家
+        item.ar.forEach(item2 => {
+          artists.id = item2.id
+          artists.name = item2.name
+          arr.push(artists)
+          artists = {}
+        })
+        obj.artists = arr
+        songs.push(obj)
+        arr = []
+        obj = {}
+        album = {}
+      })
+      this.songs = songs
       this.tracks = data.playlist.tracks
+      this.Favorite = data.playlist.subscribedCount
       this.cover = data.playlist.coverImgUrl
       this.playlist = data.playlist
     }
-
   },
   created () {
     this.getSongList(this.id)
