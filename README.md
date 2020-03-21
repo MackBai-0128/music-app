@@ -23,21 +23,36 @@
 + 电台
 + 巅峰榜单、新歌推荐
 
-## Project setup
-```
+## Build Setup
+```bash
+# 安装依赖
 npm install
-```
-
-### Compiles and hot-reloads for development
-```
+# 启动服务
 npm run serve
-```
-
-### Compiles and minifies for production
-```
+# 打包发布
 npm run build
 ```
 
+## 服务端
+
+> 感谢Binaryify提供的API
+>
+> [Node.js API service](https://github.com/Binaryify/NeteaseCloudMusicApi)
+
+### 安装
+
+```bash
+# 安装服务
+$ git clone https://github.com/Binaryify/NeteaseCloudMusicApi.git
+# 安装依赖
+$ npm install
+# 运行
+$ node app.js
+```
+
+
+
+## 项目截图
 ### 首屏加载
 
 <img src="assets/%E9%A6%96%E5%B1%8F%E5%8A%A0%E8%BD%BD%E9%A1%B5.png" alt="首屏加载页" style="zoom: 25%;weight: 400px;" />
@@ -73,7 +88,6 @@ npm run build
 > + 热搜建议
 > + 搜索建议
 > + 热搜榜
-> + 
 
 <img src="assets/%E6%90%9C%E7%B4%A2%E9%A1%B5.png" alt="搜索页" style="zoom: 25%;weight: 400px;" />
 
@@ -83,12 +97,6 @@ npm run build
 
 <img src="assets/%E6%90%9C%E7%B4%A2%E7%BB%93%E6%9E%9C%E9%A1%B5.png" alt="搜索结果页" style="zoom: 25%;weight: 400px;" />
 
-
-
-### Lints and fixes files
-```
-npm run lint
-```
-
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
