@@ -7,17 +7,12 @@
           <i class="icon-fangdajing01 text"></i>大家都在搜 怎么能忘了
         </div>
       </div>
-      <div
-        v-if="currentMusic"
-        slot="right"
-        class="slot-right"
-        @click="$router.push('/play')"
-      >
+      <div v-if="currentMusic" slot="right" class="slot-right" @click="$router.push('/play')">
         <van-circle
           layer-color="#ebedf0"
           color="#F23832"
           v-model="currentRate"
-          :rate="rate"
+          :rate="maxTime"
           :stroke-width="60"
         >
           <div slot="default" class="now-playing animation">
@@ -169,8 +164,6 @@ export default {
   props: {},
   data () {
     return {
-      currentRate: 60,
-      rate: '50%',
       banners: [1, 2],
       recommend: [],
       alImg: ''
@@ -181,7 +174,6 @@ export default {
   filters: {},
   methods: {
     onSongList (item) {
-      console.log(item)
       this.$router.push(`/songlist/${item.id}`)
     },
     // 轮播图
@@ -227,10 +219,15 @@ export default {
     this.getNewSong()
     this.getHotPlayList()
   },
-  mounted () {
-  },
+  mounted () {},
   computed: {
-    ...mapGetters(['artists', 'currentMusic'])
+    ...mapGetters(['artists', 'currentMusic', 'maxTime', 'currentTime']),
+    currentRate: {
+      get () {
+        return this.currentTime / this.maxTime * 100
+      },
+      set (val) {}
+    }
   }
 }
 </script>

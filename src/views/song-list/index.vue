@@ -13,7 +13,7 @@
           layer-color="#ebedf0"
           color="#F23832"
           v-model="currentRate"
-          :rate="rate"
+          :rate="maxTime"
           :stroke-width="60"
         >
           <div slot="default" class="now-playing animation" v-if="currentMusic">
@@ -151,8 +151,6 @@ export default {
   data () {
     return {
       title: '歌单',
-      currentRate: 60,
-      rate: '50%',
       tracks: [],
       songs: [],
       Favorite: 0,
@@ -234,7 +232,13 @@ export default {
   },
   mounted () {},
   computed: {
-    ...mapGetters(['artists', 'currentMusic'])
+    ...mapGetters(['artists', 'currentMusic', 'maxTime', 'currentTime']),
+    currentRate: {
+      get () {
+        return this.currentTime / this.maxTime * 100
+      },
+      set () {}
+    }
   }
 }
 </script>

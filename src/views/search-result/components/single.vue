@@ -61,7 +61,6 @@ export default {
       setPlayList: 'setPlayList'
     }),
     async onLoad () {
-      console.log('获取歌曲列表', this.offset)
       var songs = []
       var obj = {}
       var album = {} // 专辑
@@ -69,7 +68,6 @@ export default {
       var artists = {} // 艺术家
       // try {
       const { data } = await search({ value: this.name, offset: this.offset })
-      // console.log(data.result)
       data.result.songs.forEach(item => {
         obj.id = item.id
         obj.name = item.name
@@ -97,11 +95,6 @@ export default {
       if (this.songsList.length >= data.result.songCount) {
         this.finished = true
       }
-      // } catch (error) {
-      //   console.log(error)
-      // }
-      // 加载状态结束
-      // 数据全部加载完成
     },
     onPlayAll () {
       this.setPlayList(this.songsList)
