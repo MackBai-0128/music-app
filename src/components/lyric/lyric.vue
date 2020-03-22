@@ -72,7 +72,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-/*歌词部分*/
 .music-lyric {
   height: 62vh;
   position: absolute;

@@ -1,12 +1,4 @@
-/*
- * @Author: MackBai
- * @Date: 2020-03-20 22:39:39
- * @LastEditors: MackBai
- * @LastEditTime: 2020-03-22 14:32:18
- * @FilePath: /music-app/src/store/getters.js
- * @Description: 在states中定义的值暴露在store.getters对象中，
- *               便于我们在组件中可以通过store.getters.bookList访问数据
- */
+
 // 专辑信息
 export const artists = state => {
   return state.artists
@@ -34,4 +26,8 @@ export const currentTime = state => {
 // 歌曲长度
 export const maxTime = state => {
   return state.maxTime
+}
+// 登录token
+export const musicToken = state => {
+  return state.musicToken
 }

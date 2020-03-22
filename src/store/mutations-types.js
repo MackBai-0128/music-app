@@ -5,3 +5,4 @@ export const getcurrentTime = 'getcurrentTime' // 获取播放当前进度
 export const getmaxTime = 'getmaxTime' // 总进度
 export const setFile = 'setFile' // 提供下在的资源
 export const setArtists = 'setArtists' // 歌曲详情
+export const setMusicToken = 'setMusicToken' // 设置token

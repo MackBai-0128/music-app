@@ -29,6 +29,11 @@ export default {
     }
   },
   created () {
+    // 浏览器刷新后去首页
+    if (this.$router.path !== '/') {
+      this.$router.replace('/')
+    }
+    // 页面首次加载显示页
     if (window.performance.navigation.type !== 1) {
       console.log('首次加载页面')
       this.$router.replace('/')
@@ -39,6 +44,14 @@ export default {
   beforeDestroy () {
     clearInterval(this.timer)
     this.timer = null
+  },
+  mounted () {
+    // window.onbeforeunload = function (e) {
+    //   console.log(e)
+    //   var dialogText = 'Dialog text here'
+    //   e.returnValue = dialogText
+    //   return dialogText
+    // }
   }
 }
 </script>

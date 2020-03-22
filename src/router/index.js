@@ -63,6 +63,11 @@ const routes = [
     path: '/load',
     name: 'load',
     component: () => import('@/views/first-load')
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: () => import('@/views/login')
   }
 ]
 

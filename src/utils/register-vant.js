@@ -21,7 +21,8 @@ import {
   Tab,
   Tabs,
   ActionSheet,
-  List
+  List,
+  Form
 } from 'vant'
 
 Vue.use(Tabbar)
@@ -46,3 +47,4 @@ Vue.use(Tabbar)
   .use(Tabs)
   .use(ActionSheet)
   .use(List)
+  .use(Form)
