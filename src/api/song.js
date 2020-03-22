@@ -2,7 +2,7 @@
  * @Author: MackBai
  * @Date: 2020-03-15 16:02:20
  * @LastEditors: MackBai
- * @LastEditTime: 2020-03-20 11:58:17
+ * @LastEditTime: 2020-03-21 16:50:06
  * @FilePath: /music-app/src/api/song.js
  * @Description: 歌曲
  */
@@ -35,3 +35,21 @@ export const resource = () => musicAPI('/recommend/resource', 'GET')
 export const personalized = (data) => musicAPI(`/personalized?limit=${data}`, 'GET')
 // 获取歌词
 export const lyric = id => musicAPI(`/lyric?id=${id}`, 'GET')
+// 收藏/取消收藏歌单
+/**
+ * @description: 数字+id
+ * @param {type} Number（1，2）
+ * @return: 1收藏/2取消收藏
+ */
+export const songlist = data => musicAPI(`/playlist/subscribe?t=${data.type}&id=${data.id}`, 'GET')
+// 删除歌单
+export const detSonglist = data => musicAPI(`/playlist/delete?id=${data.id}`, 'GET')
+// 新建歌单
+export const addSonglist = data => musicAPI(`/playlist/create?name=${data.name}`, 'GET')
+// 歌单收藏者
+/**
+ * @description: id, amount
+ * @param {type} Number
+ * @return: 收藏者信息
+ */
+export const collector = data => musicAPI(`/playlist/subscribers?id=${data.id}&limit=${data.amount}`, 'GET')

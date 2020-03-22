@@ -4,7 +4,7 @@
       <i class="icon-back" slot="left"></i>
       <!-- right -->
       <div
-        v-if="$store.state.currentSong.id"
+        v-if="currentMusic"
         slot="right"
         class="slot-right"
         @click="$router.push('/play')"
@@ -16,8 +16,8 @@
           :rate="rate"
           :stroke-width="60"
         >
-          <div slot="default" class="now-playing animation" v-if="JSON.stringify($store.state.currentSong) !== '{}'">
-            <img :src="$store.state.artists.picUrl"/>
+          <div slot="default" class="now-playing animation" v-if="currentMusic">
+            <img :src="artists.picUrl"/>
           </div>
         </van-circle>
       </div>
@@ -139,6 +139,7 @@
 <script>
 import eventBus from '@/utils/eventBus'
 import { playlist } from '@/api/song'
+import { mapGetters, mapMutations } from 'vuex'
 export default {
   name: 'songList',
   props: {
@@ -171,6 +172,9 @@ export default {
   },
   filters: {},
   methods: {
+    ...mapMutations({
+      setPlayList: 'setPlayList'
+    }),
     onOperating (item) {
       console.log('onOperating', item)
     },
@@ -178,12 +182,12 @@ export default {
       console.log('MV开发中。。。', item)
     },
     onPlay (index) {
-      this.$store.commit('setPlayList', [this.songs[index]])
+      this.setPlayList([this.songs[index]])
       eventBus.$emit('play', this.songs[index].id)
       this.$router.push('/play')
     },
     onPlayAll () {
-      this.$store.commit('setPlayList', this.songs)
+      this.setPlayList(this.songs)
       this.$router.push('/play')
       eventBus.$emit('play')
     },
@@ -229,7 +233,9 @@ export default {
     this.getSongList(this.id)
   },
   mounted () {},
-  computed: {}
+  computed: {
+    ...mapGetters(['artists', 'currentMusic'])
+  }
 }
 </script>
 

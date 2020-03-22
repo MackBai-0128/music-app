@@ -15,9 +15,11 @@
 </template>
 
 <script>
+import { mapGetters, mapMutations } from 'vuex'
 import { songURL, songdetail } from '@/api/song'
 import eventBus from '@/utils/eventBus'
 import { setItem, getItem } from '@/utils/storage'
+
 export default {
   name: 'audioPage',
   props: {},
@@ -54,59 +56,58 @@ export default {
   watch: {
     audio: {
       handler (val) {
-        this.$store.commit('getTime', this.audio.currentTime)
+        this.getcurrentTime(this.audio.currentTime)
       },
       deep: true
     }
   },
   filters: {},
   methods: {
+    ...mapMutations({
+      setPlay: 'setPlay',
+      setFile: 'setFile',
+      getmaxTime: 'getmaxTime',
+      getcurrentTime: 'getcurrentTime',
+      setArtists: 'setArtists',
+      setCurrentSong: 'setCurrentSong'
+    }),
     // 获取src地址
     async getSong (id) {
       const { data } = await songURL({ url: id })
       this.$refs.audio.src = data.data[0].url
       setItem('currentIndex', this.current)
-      this.$store.commit('setFile', data.data[0])
-      this.$store.commit(
-        'setCurrentSong',
-        this.$store.state.playlist[this.current]
-      )
+      this.setFile(data.data[0])
+      this.setCurrentSong(this.playlist[this.current])
       this.$refs.audio
         .play()
         .then(() => {
-          eventBus.$emit('onPlay', true)
-          this.$store.commit('isPlay', true)
+          this.setPlay(true)
         })
         .catch(err => {
           console.dir('没有权限，播放下一首', err)
           this.current++
-          this.getSong(this.$store.state.playlist[this.current].id)
-          eventBus.$emit('onPlay', false)
-          this.$store.commit('isPlay', false)
+          this.setPlay(false)
+          this.getSong(this.playlist[this.current].id)
         })
     },
     // 当前歌曲播放结束触发
     onStop () {
       this.current++
-      if (this.current > this.$store.state.playlist.length - 1) {
+      if (this.current > this.playlist.length - 1) {
         this.current = 0
       }
-      this.getSong(this.$store.state.playlist[this.current].id)
+      this.getSong(this.playlist[this.current].id)
     },
     onAbort () {
       console.log('onAbort')
     },
     // 获取总时长
     getDuration () {
-      // 此时可以获取到duration
-      // console.log(this.$refs.audio.duration * 1000)
-      this.$store.commit('getmaxTime', ~~this.$refs.audio.duration)
+      this.getmaxTime(~~this.$refs.audio.duration)
     },
     // 获取播放进度
     onTimeupdate (e) {
       this.audio.currentTime = ~~e.target.currentTime
-      eventBus.$emit('getLyric', e.target.currentTime)
-      eventBus.$emit('bu')
     },
     // 错误回调
     onError () {
@@ -114,15 +115,15 @@ export default {
     },
     // 播放帧
     async onWaiting () {
-      console.log('waiting')
-      const { data } = await songdetail({ id: this.$store.state.currentSong.id })
+      console.log('触发waiting')
+      const { data } = await songdetail({ id: this.currentMusic.id })
       this.artists = data.songs[0].al
-      this.$store.commit('setArtists', data.songs[0].al)
-      eventBus.$emit('onLyric', this.$store.state.currentSong.id)
+      this.setArtists(data.songs[0].al)
+      eventBus.$emit('onLyric', this.currentMusic.id)
     },
     // 暂停
     onPause () {
-      eventBus.$emit('onPlay', false)
+      this.setPlay(false)
     }
   },
 
@@ -130,17 +131,19 @@ export default {
     eventBus.$on('Currently', () => {
       this.onWaiting()
     })
+    //
     this.$nextTick().then(() => {
       eventBus.$on('isPlayOnPause', () => {
         if (!this.$refs.audio.src) {
-          this.getSong(this.$store.state.currentSong.id)
+          this.getSong(this.currentMusic.id)
+          this.setPlay(true)
         } else {
           if (this.$refs.audio.paused) {
             this.$refs.audio.play()
-            eventBus.$emit('onPlay', true)
+            this.setPlay(true)
           } else {
             this.$refs.audio.pause()
-            eventBus.$emit('onPlay', false)
+            this.setPlay(false)
           }
         }
       })
@@ -149,20 +152,20 @@ export default {
     eventBus.$on('upSong', () => {
       this.current--
       if (this.current < 0) {
-        this.current = this.$store.state.playlist.length - 1
+        this.current = this.playlist.length - 1
       }
-      if (this.$store.state.playlist[this.current].id !== undefined) {
-        this.getSong(this.$store.state.playlist[this.current].id)
+      if (this.playlist[this.current].id !== undefined) {
+        this.getSong(this.playlist[this.current].id)
       }
     })
     // 下一曲
     eventBus.$on('unSong', () => {
       this.current++
-      if (this.$store.state.playlist.length - 1 < this.current) {
+      if (this.playlist.length - 1 < this.current) {
         this.current = 0
       }
-      if (this.$store.state.playlist[this.current].id !== undefined) {
-        this.getSong(this.$store.state.playlist[this.current].id)
+      if (this.playlist[this.current].id !== undefined) {
+        this.getSong(this.playlist[this.current].id)
       }
     })
   },
@@ -171,7 +174,7 @@ export default {
     eventBus.$on('play', id => {
       this.current = 0
       if (!id) {
-        this.getSong(this.$store.state.playlist[this.current].id)
+        this.getSong(this.playlist[this.current].id)
       } else {
         this.getSong(id)
       }
@@ -179,7 +182,9 @@ export default {
   },
   updated () {},
 
-  computed: {}
+  computed: {
+    ...mapGetters(['currentMusic', 'playlist'])
+  }
 }
 </script>
 

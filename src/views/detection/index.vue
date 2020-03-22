@@ -8,7 +8,7 @@
         </div>
       </div>
       <div
-        v-if="$store.state.currentSong.id"
+        v-if="currentMusic"
         slot="right"
         class="slot-right"
         @click="$router.push('/play')"
@@ -21,7 +21,7 @@
           :stroke-width="60"
         >
           <div slot="default" class="now-playing animation">
-            <img :src="$store.state.currentSong?$store.state.artists.picUrl:''" alt />
+            <img :src="artists.picUrl" />
           </div>
         </van-circle>
       </div>
@@ -163,6 +163,7 @@
 <script>
 import { banner } from '@/api/banner'
 import { newSongs, hotPlaylist, personalized } from '@/api/song'
+import { mapGetters } from 'vuex'
 export default {
   name: 'detection',
   props: {},
@@ -228,7 +229,9 @@ export default {
   },
   mounted () {
   },
-  computed: {}
+  computed: {
+    ...mapGetters(['artists', 'currentMusic'])
+  }
 }
 </script>
 

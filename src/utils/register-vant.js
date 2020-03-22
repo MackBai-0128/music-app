@@ -20,7 +20,8 @@ import {
   Toast,
   Tab,
   Tabs,
-  ActionSheet
+  ActionSheet,
+  List
 } from 'vant'
 
 Vue.use(Tabbar)
@@ -44,3 +45,4 @@ Vue.use(Tabbar)
   .use(Tab)
   .use(Tabs)
   .use(ActionSheet)
+  .use(List)

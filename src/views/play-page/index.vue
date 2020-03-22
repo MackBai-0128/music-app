@@ -1,18 +1,17 @@
 <template>
   <div class="play-page">
-    <div class="bg-img">
-      <img
-        :src="JSON.stringify($store.state.currentSong) !== '{}'?$store.state.artists.picUrl:defaultImg"
-      />
+    <div class="bg-img" :class="!isLogoLyric?'is-bg-color':''">
+      <img :src="artists.picUrl" v-if="isLogoLyric"/>
     </div>
     <div class="play-container">
       <!-- nav -->
       <div class="nav-bar">
         <i class="icon-back" @click="$router.back()"></i>
+
         <div class="title">
-          <p class="song-title">{{$store.state.currentSong?$store.state.currentSong.name:'未选择'}}</p>
+          <p class="song-title">{{currentMusic?currentMusic.name:''}}</p>
           <p class="author">
-            {{$store.state.currentSong?$store.state.currentSong.artists[0].name:''}}
+            {{currentMusic?currentMusic.artists[0].name:''}}
             <i
               class="icon-tiaozhuanqianwangyoujiantouxiangyouxiayibuxianxing"
             ></i>
@@ -27,9 +26,7 @@
         class="cover animation"
         :class="isPlay?'running':'paused'"
       >
-        <img
-          :src="JSON.stringify($store.state.currentSong) !== '{}'?$store.state.artists.picUrl:defaultImg"
-        />
+        <img :src="artists.picUrl" />
       </div>
       <!-- 歌词 -->
       <div @click="isLogoLyric = true" v-else>
@@ -45,18 +42,18 @@
           <i class="icon-caidan-dian"></i>
         </div>
         <div class="progress">
-          <span class="time">{{$store.state.currentTime | time}}</span>
+          <span class="time">{{currentTime | time}}</span>
           <mu-slider
             @change="onPlaySchedule(du)"
             track-color="rgba(255, 255, 255, 0.1);"
             thumb-color="#fff"
             color="#ccc"
             class="demo-slider"
-            v-model="$store.state.currentTime"
+            v-model="currentTime"
             :min="0"
-            :max="$store.state.maxTime?$store.state.maxTime:1"
+            :max="maxTime?maxTime:1"
           ></mu-slider>
-          <span class="time">{{$store.state.maxTime | time}}</span>
+          <span class="time">{{maxTime | time}}</span>
         </div>
         <div class="mode">
           <i v-if="cycle===1" class="icon-xunhuanbofang" @click="isCycle"></i>
@@ -73,6 +70,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import Lyric from 'lyric-parser'
 import eventBus from '@/utils/eventBus'
 import { songURL, songdetail, lyric } from '@/api/song'
@@ -85,7 +83,6 @@ export default {
     return {
       defaultImg: require('@/assets/img/timg.jpeg'),
       cycle: 1,
-      isPlay: false,
       isLike: false,
       duration: 0,
       du: 30,
@@ -93,8 +90,7 @@ export default {
       lyRic: [], // 歌词
       nolyric: false, // 是否有歌词
       lyricIndex: 0, // 当前播放歌词下标
-      isLogoLyric: true,
-      currentTime: 0
+      isLogoLyric: true
     }
   },
   components: {
@@ -108,7 +104,7 @@ export default {
       }
       var lyricIndex = 0
       for (var i = 0; i < this.lyRic.length; i++) {
-        if (val * 1000 >= (this.lyRic[i].time)) {
+        if (val * 1000 >= this.lyRic[i].time) {
           lyricIndex = i
         }
         this.lyricIndex = lyricIndex
@@ -154,10 +150,9 @@ export default {
     onDownload () {
       axios({
         method: 'get',
-        url: this.$store.state.flie.url,
+        url: this.flie.url,
         responseType: 'blob'
       }).then(res => {
-        console.log(res)
         if (!res) {
           return
         }
@@ -167,7 +162,7 @@ export default {
         link.href = url
         link.setAttribute(
           'download',
-          this.$store.state.currentSong.name + '.' + this.$store.state.flie.type
+          this.currentMusic.name + '.' + this.flie.type
         )
         document.body.appendChild(link)
         link.click()
@@ -231,18 +226,15 @@ export default {
   created () {
     // 获取新歌词
     eventBus.$on('onLyric', id => {
-      console.log(id)
       this.getlyric(id)
+      this.getSongDetail(id)
     })
-    eventBus.$on('getLyric', item => {
-      this.currentTime = item
-    })
-    this.getSongDetail(this.$store.state.currentSong.id)
-    this.getlyric(this.$store.state.currentSong.id)
-    this.isPlay = this.$store.state.isPlay
+    if (this.currentMusic) {
+      this.getSongDetail(this.currentMusic.id)
+      this.getlyric(this.currentMusic.id)
+    }
   },
   mounted () {
-    // console.log(document.getElementById('wrapper'))
     eventBus.$on('waiting', id => {
       this.getSongDetail(id)
       this.getlyric(id)
@@ -252,25 +244,11 @@ export default {
       // this.getUrl(item.id)
     })
     eventBus.$on('onPlaySong', item => {
-      console.log(item)
       this.getUrl(item.id)
-    })
-    eventBus.$on('onPlay', type => {
-      this.$store.state.isPlay = type
-      this.isPlay = type
     })
   },
   computed: {
-    isCurrent () {
-      if (this.$store.state.currentSong) {
-        if (this.$store.state.currentSong.artists[0].img) {
-          return this.$store.state.currentSong.artists[0].img
-        } else if (this.$store.state.currentSong.album.img) {
-          return this.$store.state.currentSong.album.img
-        }
-      }
-      return this.defaultImg
-    }
+    ...mapGetters(['currentMusic', 'flie', 'isPlay', 'currentTime', 'maxTime'])
   }
 }
 </script>
@@ -279,6 +257,7 @@ export default {
 .play-page {
   height: 100vh;
   overflow: hidden;
+  // background-color: #ccc;
 }
 .play-container {
   height: 100vh;
@@ -286,6 +265,9 @@ export default {
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+}
+.is-bg-color{
+  background: linear-gradient(to top,#FF6A28,#FE2F57);
 }
 .bg-img {
   position: absolute;
@@ -295,12 +277,13 @@ export default {
   bottom: 0;
   z-index: -1;
   overflow: hidden;
-  // background: linear-gradient(to bottom, #fff, #000);
+  background-color: rgba(0, 0, 0, 0.486);
+  background-blend-mode: darken;
   img {
-    height: 120vh;
-    filter: blur(40px);
-    width: 100vw;
     height: 100vh;
+    width: 150%;
+    filter: blur(18px);
+    -webkit-filter: blur(18px);
   }
 }
 .nav-bar {
@@ -357,10 +340,6 @@ export default {
 
 .animation {
   animation: myRotate 20s linear infinite;
-}
-
-.v-lyric {
-  // height: 20px;
 }
 
 .features {

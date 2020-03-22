@@ -8,13 +8,17 @@
       </van-field>
     </div>
     <!-- 标签导航 -->
-    <van-tabs v-model="active" :border="false">
+    <van-tabs v-model="active" :border="false" @change="onChange">
       <van-tab title="综合">
         <keep-alive>
-          <composite :songs="songs" :album="album" :artist="artist" />
+          <composite :name="name" :songs="songs" :album="album" :artist="artist" />
         </keep-alive>
       </van-tab>
-      <van-tab title="单曲">内容 2</van-tab>
+      <van-tab title="单曲">
+        <!-- <keep-alive> -->
+          <single :name="name"/>
+        <!-- </keep-alive> -->
+      </van-tab>
       <van-tab title="云村">
         <div>开发中。。。{{active}}</div>
       </van-tab>
@@ -42,6 +46,7 @@
 
 <script>
 import { search, searchMultimatch } from '@/api/search'
+import eventBus from '@/utils/eventBus'
 export default {
   name: 'searchList',
   props: {
@@ -61,11 +66,15 @@ export default {
     }
   },
   components: {
-    composite: () => import('./components/composite')
+    composite: () => import('./components/composite'),
+    single: () => import('./components/single')
   },
   watch: {},
   filters: {},
   methods: {
+    onChange () {
+      // console.log(1)
+    },
     onFocus (value) {
       this.$router.push(`/search/${value}`)
     },
@@ -84,6 +93,7 @@ export default {
       })
       try {
         const { data } = await search({ value: this.name })
+        console.log('搜索结果', data.result)
         data.result.songs.forEach(item => {
           obj.id = item.id
           obj.name = item.name
@@ -111,17 +121,23 @@ export default {
         this.$toast.fail('加载失败')
       }
     },
+    // 多重匹配
     async getSearchAll () {
       const { data } = await searchMultimatch(this.name)
       this.album = data.result.album
       this.artist = data.result.artist
+      // console.log(data.result)
     }
   },
   created () {
     this.onSearch()
     this.getSearchAll()
   },
-  mounted () {},
+  mounted () {
+    eventBus.$on('onSingleAll', () => {
+      this.active = 1
+    })
+  },
   computed: {}
 }
 </script>

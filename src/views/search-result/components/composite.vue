@@ -74,7 +74,7 @@
           </div>
         </li>
         <li class="songs-all" @click="viewAllSongs">
-          查看全部单曲
+          查看更多<a @click="viewAllSongs">{{name}}</a>相关歌曲
           <i class="icon-right"></i>
         </li>
       </ul>
@@ -83,6 +83,7 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
 import eventBus from '@/utils/eventBus'
 export default {
   name: 'composite',
@@ -96,6 +97,9 @@ export default {
     },
     artist: {
       type: Array
+    },
+    name: {
+      type: String
     }
   },
   data () {
@@ -146,20 +150,23 @@ export default {
     }
   },
   methods: {
+    ...mapMutations({
+      setPlayList: 'setPlayList'
+    }),
     // 查看全部歌曲
     viewAllSongs () {
-      console.log('viewAllSongs')
+      eventBus.$emit('onSingleAll')
     },
     // 播放全部
     onPlayAll () {
-      this.$store.commit('setPlayList', this.songsList)
+      this.setPlayList(this.songsList)
       this.$router.push('/play')
       eventBus.$emit('play')
     },
     // 播放单曲
     goPlay (item) {
       this.$router.push('/play')
-      this.$store.commit('setPlayList', [item])
+      this.setPlayList([item])
       eventBus.$emit('play', item.id)
     },
     getSongs () {}
