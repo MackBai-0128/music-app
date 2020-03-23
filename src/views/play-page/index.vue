@@ -1,7 +1,7 @@
 <template>
   <div class="play-page">
     <div class="bg-img" :class="!isLogoLyric?'is-bg-color':''">
-      <img :src="artists.picUrl" v-if="isLogoLyric"/>
+      <img :src="artists.picUrl" v-if="isLogoLyric" />
     </div>
     <div class="play-container">
       <!-- nav -->
@@ -10,7 +10,7 @@
 
         <div class="title">
           <p class="song-title">{{currentMusic?currentMusic.name:''}}</p>
-          <p class="author">
+          <p class="author" @click="onArtists">
             {{currentMusic?currentMusic.artists[0].name:''}}
             <i
               class="icon-tiaozhuanqianwangyoujiantouxiangyouxiayibuxianxing"
@@ -44,7 +44,8 @@
         <div class="progress">
           <span class="time">{{currentTime | time}}</span>
           <mu-slider
-            @change="onPlaySchedule(du)"
+            disabled
+            @change="onPlaySchedule"
             track-color="rgba(255, 255, 255, 0.1);"
             thumb-color="#fff"
             color="#ccc"
@@ -73,7 +74,7 @@
 import { mapGetters } from 'vuex'
 import Lyric from 'lyric-parser'
 import eventBus from '@/utils/eventBus'
-import { songURL, songdetail, lyric } from '@/api/song'
+import { songURL, songdetail, lyric, artists } from '@/api/song'
 import axios from 'axios'
 import vLyric from '@/components/lyric/lyric'
 export default {
@@ -95,7 +96,6 @@ export default {
   },
   components: {
     vLyric
-    // betterScroll
   },
   watch: {
     currentTime (val) {
@@ -131,10 +131,17 @@ export default {
     }
   },
   methods: {
+    async onArtists () {
+      console.log(this.currentMusic.artists[0].id)
+      const { data } = await artists({ id: this.currentMusic.artists[0].id })
+      console.log(data)
+    },
     // 获取歌词
     async getlyric (id) {
       try {
         const { data } = await lyric(id)
+        console.log(data.lrc.lyric)
+
         this.lyRic = new Lyric(data.lrc.lyric).lines
         this.nolyric = false
       } catch (error) {
@@ -171,8 +178,8 @@ export default {
       })
     },
     // 滑动条
-    onPlaySchedule (e) {
-      console.log(e)
+    onPlaySchedule () {
+      eventBus.$emit('currentTime', this.du)
     },
     // 喜欢
     onLike () {
@@ -266,8 +273,8 @@ export default {
   justify-content: space-between;
   align-items: center;
 }
-.is-bg-color{
-  background: linear-gradient(to top,#FF6A28,#FE2F57);
+.is-bg-color {
+  background: linear-gradient(to top, #ff6a28, #fe2f57);
 }
 .bg-img {
   position: absolute;

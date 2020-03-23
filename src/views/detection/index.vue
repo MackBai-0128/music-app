@@ -61,7 +61,7 @@
       <p>推荐歌单</p>
       <div class="recommend-2">
         <span>为你精挑细选</span>
-        <van-button size="mini" class="btn-more">查看更多</van-button>
+        <van-button size="mini" class="btn-more" @click="onSongsSquare">查看更多</van-button>
       </div>
     </div>
     <!-- 内容 -->
@@ -157,7 +157,7 @@
 
 <script>
 import { banner } from '@/api/banner'
-import { newSongs, hotPlaylist, personalized } from '@/api/song'
+import { newSongs, personalized } from '@/api/song'
 import { mapGetters } from 'vuex'
 export default {
   name: 'detection',
@@ -173,6 +173,11 @@ export default {
   watch: {},
   filters: {},
   methods: {
+    // 歌单广告
+    onSongsSquare () {
+      console.log('歌单广场')
+      this.$router.push('/songslistsquare')
+    },
     onSongList (item) {
       this.$router.push(`/songlist/${item.id}`)
     },
@@ -201,23 +206,18 @@ export default {
     },
     // 推荐歌单-为你精挑细选
     async getPersonalized () {
-      const { data } = await personalized(6)
+      const { data } = await personalized(30)
       this.recommend = data.result
     },
     async getNewSong () {
       const { data } = await newSongs()
       console.log(data)
-    },
-    async getHotPlayList () {
-      const { data } = await hotPlaylist()
-      console.log('热门歌单分类', data)
     }
   },
   created () {
     this.getBanner()
     this.getPersonalized()
     this.getNewSong()
-    this.getHotPlayList()
   },
   mounted () {},
   computed: {

@@ -131,7 +131,7 @@ export default {
     eventBus.$on('Currently', () => {
       this.onWaiting()
     })
-    //
+    // 播放/暂停
     this.$nextTick().then(() => {
       eventBus.$on('isPlayOnPause', () => {
         if (!this.$refs.audio.src) {
@@ -170,6 +170,12 @@ export default {
     })
   },
   mounted () {
+    // 拖拽进度条
+    eventBus.$on('currentTime', item => {
+      // console.log(item)
+      this.audio.currentTime = item
+      this.$refs.audio.currentTime = item
+    })
     // 传值播放
     eventBus.$on('play', id => {
       this.current = 0

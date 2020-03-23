@@ -2,7 +2,7 @@
  * @Author: MackBai
  * @Date: 2020-03-15 16:02:20
  * @LastEditors: MackBai
- * @LastEditTime: 2020-03-21 16:50:06
+ * @LastEditTime: 2020-03-23 14:50:10
  * @FilePath: /music-app/src/api/song.js
  * @Description: 歌曲
  */
@@ -20,10 +20,10 @@ export const songURL = data => musicAPI(`/song/url?id=${data.url}`, 'GET')
 export const newSongs = () => musicAPI('/personalized/newsong', 'GET')
 // 热门歌单分类
 export const hotPlaylist = () => musicAPI('/playlist/hot', 'GET')
-// 相关歌单推荐
-export const related = data => musicAPI(`/related/playlist?id=${data.id}`, 'GET')
 // 获取歌单详情
 export const playlist = data => musicAPI(`/playlist/detail?id=${data.id}`, 'GET')
+// 相关歌单推荐
+export const related = data => musicAPI(`/related/playlist?id=${data.id}`, 'GET')
 // 获取歌曲详情
 export const songdetail = data => musicAPI(`/song/detail?ids=${data.id}`, 'GET')
 // 音乐是否可用
@@ -53,3 +53,9 @@ export const addSonglist = data => musicAPI(`/playlist/create?name=${data.name}`
  * @return: 收藏者信息
  */
 export const collector = data => musicAPI(`/playlist/subscribers?id=${data.id}&limit=${data.amount}`, 'GET')
+/**
+ * @description: 获取歌手单曲
+ * @param {type} Number
+ * @return: 歌手部分信息和热门歌曲
+ */
+export const artists = data => musicAPI(`/artists?id=${data.id}`, 'GET')

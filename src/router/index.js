@@ -51,6 +51,11 @@ const routes = [
         name: 'songlist',
         component: () => import('@/views/song-list'),
         props: true
+      },
+      {
+        path: '/songslistsquare',
+        name: 'songslistsquare',
+        component: () => import('@/views/song-list-square')
       }
     ]
   },
