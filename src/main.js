@@ -2,12 +2,14 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+import { changeNumber } from './filter'
 import './styles/index.less'
 import './utils/register-vant'
 import './utils/muse-ui'
 import './utils/swiper'
 import 'amfe-flexible'
 import './fonts/font.css'
+Vue.filter('changeNumber', changeNumber)
 Vue.config.productionTip = false
 new Vue({
   router,

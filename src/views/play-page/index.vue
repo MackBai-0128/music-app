@@ -106,7 +106,6 @@ export default {
       var lyricIndex = 0
       for (var i = 0; i < this.lyRic.length; i++) {
         if (val >= this.lyRic[i].time) {
-          console.log(val)
           lyricIndex = i
         }
         this.lyricIndex = lyricIndex
@@ -120,6 +119,7 @@ export default {
     }
   },
   filters: {
+    // 时间处理
     time (val) {
       var secondType = typeof val
       if (secondType === 'number' || secondType === 'string') {
@@ -135,7 +135,6 @@ export default {
   methods: {
     // test歌手信息
     async onArtists () {
-      console.log(this.currentMusic.artists[0].id)
       const { data } = await artists({ id: this.currentMusic.artists[0].id })
       console.log(data)
     },
@@ -145,8 +144,6 @@ export default {
         const { data } = await lyric(id)
         // this.lyRic = new Lyric(data.lrc.lyric).lines
         this.lyRic = parseLyric(data.lrc.lyric)
-        console.log(this.lyRic)
-
         this.nolyric = false
       } catch (error) {
         this.nolyric = true

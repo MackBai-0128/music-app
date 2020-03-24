@@ -131,24 +131,7 @@ export default {
       this.artistList = val
     }
   },
-  filters: {
-    changeNumber (val) {
-      if (!val) {
-        return
-      }
-      var newVal = val.toString()
-      if (val > 9999) {
-        newVal = newVal
-          .split('')
-          .reverse()
-          .slice(4)
-          .reverse()
-          .join('')
-        newVal = newVal + '万'
-      }
-      return newVal
-    }
-  },
+  filters: {},
   methods: {
     ...mapMutations({
       setPlayList: 'setPlayList'

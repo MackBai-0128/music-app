@@ -70,7 +70,7 @@
         <li v-for="item in recommend" :key="item.id" @click="onSongList(item)">
           <div class="logo">
             <div class="play-count">
-              <i class="icon-bofang">{{item.playCount}}</i>
+              <i class="icon-bofang">{{item.playCount | changeNumber}}</i>
             </div>
             <img :src="item.picUrl" alt />
           </div>

@@ -20,3 +20,20 @@ export function parseLyric (lrc) {
   }
   return lyric
 }
+
+export function changeNumber (val) {
+  if (!val) {
+    return
+  }
+  var newVal = val.toString()
+  if (val > 9999) {
+    newVal = newVal
+      .split('')
+      .reverse()
+      .slice(4)
+      .reverse()
+      .join('')
+    newVal = newVal + '万'
+  }
+  return newVal
+}
