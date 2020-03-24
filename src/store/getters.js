@@ -31,3 +31,7 @@ export const maxTime = state => {
 export const musicToken = state => {
   return state.musicToken
 }
+// 用户信息
+export const profile = state => {
+  return state.profile
+}

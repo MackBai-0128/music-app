@@ -2,7 +2,7 @@
  * @Author: MackBai
  * @Date: 2020-03-22 20:41:38
  * @LastEditors: MackBai
- * @LastEditTime: 2020-03-22 20:46:13
+ * @LastEditTime: 2020-03-24 20:01:05
  * @FilePath: /music-app/src/api/user.js
  * @Description: user信息
  * 登录成功后可以获取

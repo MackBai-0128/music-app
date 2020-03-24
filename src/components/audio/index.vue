@@ -127,10 +127,8 @@ export default {
     }
   },
 
-  created () {
-    eventBus.$on('Currently', () => {
-      this.onWaiting()
-    })
+  created () {},
+  mounted () {
     // 播放/暂停
     this.$nextTick().then(() => {
       eventBus.$on('isPlayOnPause', () => {
@@ -146,6 +144,10 @@ export default {
             this.setPlay(false)
           }
         }
+      })
+      // 播放视频暂停音乐
+      eventBus.$on('onVideo', () => {
+        this.$refs.audio.pause()
       })
     })
     // 上一曲
@@ -168,9 +170,7 @@ export default {
         this.getSong(this.playlist[this.current].id)
       }
     })
-  },
-  mounted () {
-    // 拖拽进度条
+    // 拖拽进度条**未实现**
     eventBus.$on('currentTime', item => {
       // console.log(item)
       this.audio.currentTime = item

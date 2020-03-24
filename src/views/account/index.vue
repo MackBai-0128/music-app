@@ -39,16 +39,12 @@
       <div class="logged" v-else>
         <div class="user-info">
           <div class="user-cover">
-            <img src="../../assets/img/default.jpg" alt />
+            <img :src="profile.avatarUrl" alt />
           </div>
-          <p>漫步在云间的舞者</p>
+          <p>{{profile.nickname}}</p>
         </div>
         <div class="sign-out">
-          <van-button
-          size="small"
-          type="default"
-          color="#F13832"
-        >退出登录</van-button>
+          <van-button size="small" type="default" color="#F13832" @click="onSignOut">退出登录</van-button>
         </div>
       </div>
     </div>
@@ -56,7 +52,8 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
+import { logout } from '@/api/login'
 export default {
   name: 'account',
   props: {},
@@ -66,11 +63,26 @@ export default {
   components: {},
   watch: {},
   filters: {},
-  methods: {},
+  methods: {
+    // 退出登录
+    async onSignOut () {
+      await this.$dialog.confirm({
+        message: '您确定要退出登录吗？'
+      })
+      const { data } = await logout()
+      if (data.code === 200) {
+        this.$toast('退出成功')
+        this.setMusicToken(null)
+      }
+    },
+    ...mapMutations({
+      setMusicToken: 'setMusicToken'
+    })
+  },
   created () {},
   mounted () {},
   computed: {
-    ...mapGetters(['artists', 'currentMusic', 'maxTime', 'currentTime', 'musicToken']),
+    ...mapGetters(['artists', 'currentMusic', 'maxTime', 'currentTime', 'musicToken', 'profile']),
     currentRate: {
       get () {
         return (this.currentTime / this.maxTime) * 100
@@ -201,11 +213,11 @@ export default {
       }
     }
     // 退出登录
-    .sign-out{
+    .sign-out {
       padding-bottom: 30px;
       display: flex;
       justify-content: center;
-      /deep/ .van-button{
+      /deep/ .van-button {
         width: 100%;
         font-size: 14px;
       }

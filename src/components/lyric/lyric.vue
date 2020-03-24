@@ -9,7 +9,7 @@
             v-for="(item,index) in lyric"
             :key="index"
             :class="{on:lyricIndex===index}"
-          >{{ item.txt }}</p>
+          >{{ item.text }}</p>
         </template>
         <p v-else>歌词加载失败！</p>
       </div>
@@ -52,7 +52,7 @@ export default {
   mounted () {
     window.addEventListener('resize', () => {
       clearTimeout(this.resizeTimer)
-      this.resizeTimer = setTimeout(() => this.clacTop(), 60)
+      this.resizeTimer = setTimeout(() => this.clacTop(), 50)
     })
     this.$nextTick(() => this.clacTop())
   },

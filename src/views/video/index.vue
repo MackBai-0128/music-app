@@ -31,11 +31,17 @@
       <swiper-slide>Slide 7</swiper-slide>
     </swiper>-->
     <div class="recommend-list">
-      <ul class="mv-container">
+      <!-- <div class>推荐</div> -->
+      <!-- <ul class="mv-container">
         <li class="mv-item" v-for="(item,index) in mvList" :key="item.id" @click="onShow(index)">
           <div class="mv-video">
-            <div class="icon" >
-              <i v-show="pauseBtn" class="icon-bofang-bar" v-if="showIndex === index" @click.stop="onPause(index)"></i>
+            <div class="icon">
+              <i
+                v-show="pauseBtn"
+                class="icon-bofang-bar"
+                v-if="showIndex === index"
+                @click.stop="onPause(index)"
+              ></i>
               <i class="icon-bofang1" v-else @click.stop="onPlayMv(item.id,index)"></i>
             </div>
             <video style="display:neno" class="videoElm" @ended="onEnded(item.id,index)"></video>
@@ -43,7 +49,45 @@
           </div>
           <div class="mv-text">
             <div class="text">{{item.name}}</div>
-            <div class="user-info"></div>
+            <div class="user-info">
+              <div class="artist-name">
+                <div class="cover">
+                  <img :src="item.picUrl" alt />
+                </div>
+                <p>{{item.artistName}}</p>
+              </div>
+              <div class="playCount">{{item.playCount+' 次观看'}}</div>
+            </div>
+          </div>
+        </li>
+      </ul>-->
+      <div class="new-mv">最新MV</div>
+      <ul class="mv-container">
+        <li class="mv-item" v-for="(item,index) in newMvList" :key="item.id" @click="onShow(index)">
+          <div class="mv-video">
+            <div class="icon">
+              <i
+                v-show="pauseBtn"
+                class="icon-bofang-bar"
+                v-if="showIndex === index"
+                @click.stop="onPause(index)"
+              ></i>
+              <i class="icon-bofang1" v-else @click.stop="onPlayMv(item.id,index)"></i>
+            </div>
+            <video style="display:neno" class="videoElm" @ended="onEnded(item.id,index)"></video>
+            <img :src="item.cover" />
+          </div>
+          <div class="mv-text">
+            <div class="text">{{item.name}}</div>
+            <div class="user-info">
+              <div class="artist-name">
+                <div class="cover">
+                  <img :src="item.cover" alt />
+                </div>
+                <p>{{item.artistName}}</p>
+              </div>
+              <div class="playCount">{{item.playCount+' 次观看'}}</div>
+            </div>
           </div>
         </li>
       </ul>
@@ -53,9 +97,9 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import eventBus from '@/utils/eventBus'
+import { recommendMv, mvUrl, newMv } from '@/api/mv'
 // import { swiper, swiperSlide } from 'vue-awesome-swiper'
-
-import { recommendMv, mvUrl } from '@/api/mv'
 export default {
   name: 'videoPage',
   props: {},
@@ -80,6 +124,7 @@ export default {
         }
       },
       mvList: [],
+      newMvList: [],
       showIndex: null,
       video: 'video',
       pauseBtn: true,
@@ -93,8 +138,9 @@ export default {
   watch: {},
   filters: {},
   methods: {
+    // 暂停按钮隐藏
     onShow (index) {
-      this.time = null
+      clearTimeout(this.time)
       this.pauseBtn = true
       this.time = setTimeout(() => {
         this.pauseBtn = false
@@ -113,7 +159,8 @@ export default {
     },
     // 播放/暂停
     async onPlayMv (id, i) {
-      this.time = null
+      eventBus.$emit('onVideo')
+      clearTimeout(this.time)
       this.pauseBtn = true
       this.showIndex = i
       var vio = document.querySelectorAll('.videoElm')
@@ -139,10 +186,15 @@ export default {
         this.pauseBtn = false
       }, 3000)
     },
-    // 获取mv列表
+    // 获取推荐mv列表
     async getrecommendMv () {
       const { data } = await recommendMv()
       this.mvList = data.result
+    },
+    // 获取最新mv
+    async getNewMv () {
+      const { data } = await newMv({ limit: 30 })
+      this.newMvList = data.data
     },
     // 获取mv地址
     async getMvUrl (id) {
@@ -152,6 +204,7 @@ export default {
   },
   created () {
     this.getrecommendMv()
+    this.getNewMv()
   },
   mounted () {},
   computed: {
@@ -162,6 +215,11 @@ export default {
       },
       set (val) {}
     }
+  },
+  beforeRouteLeave (to, from, next) {
+    this.pauseBtn = true
+    this.showIndex = null
+    next()
   }
 }
 </script>
@@ -169,14 +227,27 @@ export default {
 <style scoped lang="less">
 .videoPage {
   padding-top: 46px;
+  height: 100vh;
+  overflow: scroll;
+  background-color: #f5f5f1;
 }
 .recommend-list {
-  // background-color: #ccc;
-  height: 100px;
+  .new-mv {
+    padding: 0 10px;
+    background-color: #fff;
+    font-size: 18px;
+  }
   .mv-container {
-    padding: 10px;
     .mv-item {
+      position: relative;
+      padding: 10px;
+      box-sizing: border-box;
+      width: 100vw;
+      margin-bottom: 8px;
+      background-color: #fff;
       .mv-video {
+        height: 200px;
+        overflow: hidden;
         position: relative;
         border-radius: 10px;
         overflow: hidden;
@@ -198,12 +269,48 @@ export default {
             color: #fff;
           }
         }
+        .videoElm {
+          width: 100%;
+          height: 100%;
+          z-index: 0;
+          position: absolute;
+        }
       }
-      .videoElm{
-        width: 100%;
-        height: 100%;
-        z-index: 0;
-        position: absolute;
+      .mv-text {
+        color: #666;
+        font-size: 14px;
+        .text {
+          font-weight: bold;
+          padding: 5px 0;
+        }
+        .user-info {
+          padding-top: 5px;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          border-top: 1px solid #f1f1f1;
+          .artist-name {
+            display: flex;
+            align-items: center;
+            .cover {
+              border-radius: 50%;
+              overflow: hidden;
+              width: 30px;
+              height: 30px;
+              margin-right: 8px;
+              img {
+                min-width: 30px;
+                min-height: 30px;
+                object-fit: cover;
+              }
+            }
+          }
+          .playCount {
+            font-size: 12px;
+            color: #ccc;
+          }
+        }
       }
     }
   }
@@ -237,6 +344,7 @@ export default {
   right: 0;
   top: 0;
   border: none;
+  z-index: 999;
 }
 .van-swipe {
   margin: 8px;

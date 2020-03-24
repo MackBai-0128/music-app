@@ -72,8 +72,9 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import Lyric from 'lyric-parser'
+// import Lyric from 'lyric-parser'
 import eventBus from '@/utils/eventBus'
+import { parseLyric } from '@/filter'
 import { songURL, songdetail, lyric, artists } from '@/api/song'
 import axios from 'axios'
 import vLyric from '@/components/lyric/lyric'
@@ -88,7 +89,7 @@ export default {
       duration: 0,
       du: 30,
       artists: {},
-      lyRic: [], // 歌词
+      lyRic: null, // 歌词
       nolyric: false, // 是否有歌词
       lyricIndex: 0, // 当前播放歌词下标
       isLogoLyric: true
@@ -104,7 +105,8 @@ export default {
       }
       var lyricIndex = 0
       for (var i = 0; i < this.lyRic.length; i++) {
-        if (val * 1000 >= this.lyRic[i].time) {
+        if (val >= this.lyRic[i].time) {
+          console.log(val)
           lyricIndex = i
         }
         this.lyricIndex = lyricIndex
@@ -131,6 +133,7 @@ export default {
     }
   },
   methods: {
+    // test歌手信息
     async onArtists () {
       console.log(this.currentMusic.artists[0].id)
       const { data } = await artists({ id: this.currentMusic.artists[0].id })
@@ -140,9 +143,10 @@ export default {
     async getlyric (id) {
       try {
         const { data } = await lyric(id)
-        console.log(data.lrc.lyric)
+        // this.lyRic = new Lyric(data.lrc.lyric).lines
+        this.lyRic = parseLyric(data.lrc.lyric)
+        console.log(this.lyRic)
 
-        this.lyRic = new Lyric(data.lrc.lyric).lines
         this.nolyric = false
       } catch (error) {
         this.nolyric = true

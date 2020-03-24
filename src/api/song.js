@@ -2,7 +2,7 @@
  * @Author: MackBai
  * @Date: 2020-03-15 16:02:20
  * @LastEditors: MackBai
- * @LastEditTime: 2020-03-23 14:50:10
+ * @LastEditTime: 2020-03-24 21:12:00
  * @FilePath: /music-app/src/api/song.js
  * @Description: 歌曲
  */
@@ -30,7 +30,9 @@ export const songdetail = data => musicAPI(`/song/detail?ids=${data.id}`, 'GET')
 // 传入歌曲 id, 可获取音乐是否可用,返回 { success: true, message: 'ok' } 或者 { success: false, message: '亲爱的,暂无版权' }
 export const check = data => musicAPI(`/check/music?id=${data.id}`, 'GET')
 // 每日推荐歌单（需登录）
-export const resource = () => musicAPI('/recommend/resource', 'GET')
+export const resource = () => musicAPI('/recommend/resource/', 'GET')
+// 每日推荐歌曲（需登录）
+export const recommend = () => musicAPI('/recommend/songs', 'GET')
 // 推荐歌单
 export const personalized = (data) => musicAPI(`/personalized?limit=${data}`, 'GET')
 // 获取歌词
@@ -59,3 +61,11 @@ export const collector = data => musicAPI(`/playlist/subscribers?id=${data.id}&l
  * @return: 歌手部分信息和热门歌曲
  */
 export const artists = data => musicAPI(`/artists?id=${data.id}`, 'GET')
+/**
+ * @description: 新歌速递
+ * @param {type} Number  地区： 全部:0 华语:7 欧美:96 日本:8 韩国:16
+ * @return: 歌曲列表
+ */
+export const topSong = data => musicAPI(`/top/song?type=${data.type}`, 'GET')
+// 排行榜
+export const topList = data => musicAPI(`/top/list?idx=${data.idx}`, 'GET')

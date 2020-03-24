@@ -56,7 +56,7 @@
       </van-grid-item>
     </van-grid>
     <!-- -----=================------------------------------- -->
-    <!-- 推荐歌单 -->
+    <!-- 为你精挑细选 -->
     <div class="recommend">
       <p>推荐歌单</p>
       <div class="recommend-2">
@@ -82,7 +82,7 @@
     </div>
     <!-- /推荐歌单 -->
     <!-- -----=================------------------------------- -->
-    <!-- 风格推荐 -->
+    <!-- 英语推荐 -->
     <div class="recommend">
       <p>风格推荐</p>
       <div class="recommend-2">
@@ -93,7 +93,7 @@
       </div>
     </div>
     <!-- 内容 -->
-    <van-swipe class="my-swipe" :show-indicators="false" :loop="false">
+    <van-swipe class="my-swipe1" :show-indicators="false" :loop="false">
       <van-swipe-item v-for="item in 5" :key="item">
         <ul class="content-item">
           <li v-for="item in 3" :key="item" class="item">
@@ -118,38 +118,41 @@
     </van-swipe>
     <!-- /风格推荐 -->
     <!-- -----=================------------------------------- -->
-    <!-- 热门歌曲 -->
-    <div class="recommend">
-      <p>热门推荐</p>
-      <div class="recommend-2">
-        <span>精选单曲</span>
-        <van-button size="mini" class="btn-more">
+    <!-- 每日推荐 -->
+    <template>
+      <div class="recommend">
+        <p>每日精选</p>
+        <div class="recommend-2">
+          <span>今日热点</span>
+          <!-- <van-button size="mini" class="btn-more">
           <i class="icon-bofang1"></i> 播放全部
-        </van-button>
+          </van-button>-->
+        </div>
       </div>
-    </div>
-    <!-- 列表 -->
-    <div class="hot-list">
-      <ul class="content-item">
-        <li v-for="item in 3" :key="item" class="item">
-          <div class="logo">
-            <img src="../../assets/img/logo.png" alt />
-          </div>
-          <div class="title">
-            <div class="title-name">
-              123
-              <span>abc</span>
+      <!-- 列表 -->
+      <div class="hot-list">
+        <ul class="content-item">
+          <li class="item" v-for="item in dailyList" :key="item.id">
+            <div class="logo">
+              <img :src="item.album.picUrl" alt />
             </div>
-            <div class="title-legend">
-              <i class="icon-sq"></i> 12341
+            <div class="title">
+              <div class="title-name">
+                {{item.name}}
+                <span>- {{item.artists[0].name}}</span>
+              </div>
+              <div class="title-legend">
+                <i class="icon-sq"></i>
+                {{item.album.company}}
+              </div>
             </div>
-          </div>
-          <div class="play-btn">
-            <i class="icon-bofang1"></i>
-          </div>
-        </li>
-      </ul>
-    </div>
+            <div class="play-btn">
+              <i class="icon-bofang1" @click="onPlay(item)"></i>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </template>
     <!-- /热门歌曲 -->
     <!-- -----=================------------------------------- -->
   </div>
@@ -157,8 +160,16 @@
 
 <script>
 import { banner } from '@/api/banner'
-import { newSongs, personalized } from '@/api/song'
-import { mapGetters } from 'vuex'
+import {
+  newSongs,
+  personalized,
+  topSong,
+  topList,
+  recommend
+} from '@/api/song'
+// import { djprogram, djUrl } from '@/api/dj'
+import eventBus from '@/utils/eventBus'
+import { mapGetters, mapMutations } from 'vuex'
 export default {
   name: 'detection',
   props: {},
@@ -166,6 +177,7 @@ export default {
     return {
       banners: [1, 2],
       recommend: [],
+      dailyList: [],
       alImg: ''
     }
   },
@@ -173,6 +185,42 @@ export default {
   watch: {},
   filters: {},
   methods: {
+    ...mapMutations({
+      setPlayList: 'setPlayList'
+    }),
+    // 播放
+    onPlay (item) {
+      console.log(item)
+      // this.$router.push('/play')
+      this.setPlayList([item])
+      eventBus.$emit('play', item.id)
+    },
+    // 每日推荐(需要登录)
+    async getResource () {
+      const { data } = await recommend()
+      this.dailyList = data.data.dailySongs
+    },
+    // 排行榜
+    async getTopList () {
+      const { data } = await topList({ idx: 1 })
+      console.log('排行榜', data)
+    },
+    // 新歌速递
+    async getTopSong () {
+      const { data } = await topSong({ type: 7 })
+      console.log('新歌速递', data)
+    },
+    // // 获取电台地址
+    // async getDjUrl (id) {
+    //   const { data } = await djUrl({ id })
+    //   console.log(data)
+    // },
+    // // 获取推荐电台
+    // async getDjprogram () {
+    //   const { data } = await djprogram()
+    //   console.log(data.result)
+    //   this.getDjUrl(data.result[0].id)
+    // },
     // 歌单广告
     onSongsSquare () {
       console.log('歌单广场')
@@ -211,20 +259,24 @@ export default {
     },
     async getNewSong () {
       const { data } = await newSongs()
-      console.log(data)
+      console.log('推荐新音乐', data)
     }
   },
   created () {
     this.getBanner()
     this.getPersonalized()
     this.getNewSong()
+    this.getTopSong()
+    this.getTopList()
+    this.getResource()
+    // this.getDjprogram()
   },
   mounted () {},
   computed: {
     ...mapGetters(['artists', 'currentMusic', 'maxTime', 'currentTime']),
     currentRate: {
       get () {
-        return this.currentTime / this.maxTime * 100
+        return (this.currentTime / this.maxTime) * 100
       },
       set (val) {}
     }
@@ -263,6 +315,13 @@ export default {
     padding: 8px;
     border-radius: 50%;
     font-size: 20px;
+  }
+}
+// 阴雨推荐
+.my-swipe1 {
+  // width: 90vw;
+  /deep/ .van-swipe-item {
+    // width: 350px !important;
   }
 }
 
@@ -322,7 +381,6 @@ export default {
           width: 300px;
         }
         .play-count {
-          // height: 10px;
           position: absolute;
           top: 3px;
           right: 5px;
@@ -447,6 +505,14 @@ export default {
 }
 .hot-list {
   padding: 0 10px;
+  .content-item {
+    .logo {
+      border-radius: 5px;
+      overflow: hidden;
+      img {
+      }
+    }
+  }
 }
 // 正在播放logo旋转
 .animation {

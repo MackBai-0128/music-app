@@ -13,6 +13,7 @@
     "axios": "^0.19.2",
     "better-scroll": "^1.15.2",
     "core-js": "^3.6.4",
+    "js-cookie": "^2.2.1",
     "lodash": "^4.17.15",
     "lyric-parser": "^1.0.1",
     "muse-ui": "^3.0.2",
