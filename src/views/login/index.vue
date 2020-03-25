@@ -34,6 +34,7 @@
 
 <script>
 import { phoneLogin, emailLogin } from '@/api/login'
+import { setToken } from '@/utils/util'
 import { mapMutations } from 'vuex'
 export default {
   name: '',
@@ -71,7 +72,7 @@ export default {
             this.$toast(data.message)
             return
           }
-          this.setMusicToken(data.token)
+          setToken('music-token')
           this.setUserInfo(data.profile)
           this.$router.back()
         } catch (error) {
@@ -83,7 +84,6 @@ export default {
       }
     },
     ...mapMutations({
-      setMusicToken: 'setMusicToken',
       setUserInfo: 'setUserInfo'
     })
   },

@@ -10,6 +10,7 @@
 <script>
 import firstLoad from './views/first-load'
 import { status } from '@/api/login'
+import { mapMutations } from 'vuex'
 export default {
   data () {
     return {
@@ -22,10 +23,16 @@ export default {
     vAudio: () => import('./components/audio')
   },
   methods: {
+    ...mapMutations({
+      setLoginStatus: 'setLoginStatus'
+    }),
     async getstatus () {
       try {
         const res = await status()
         console.log('登录状态', res)
+        if (res.statusText === 'OK') {
+          this.setLoginStatus(true)
+        }
       } catch (error) {
         console.log('未登录', error.response)
       }
@@ -41,7 +48,6 @@ export default {
     this.getstatus()
     // 浏览器刷新后去首页
     if (this.$router.path !== '/') {
-      this.$toast('刷新页面了')
       this.$router.replace('/')
     }
     // 页面首次加载显示页
@@ -49,6 +55,8 @@ export default {
       console.log('首次加载页面')
       this.$router.replace('/')
       this.timeOut()
+    } else {
+      this.$toast('刷新页面了')
     }
   },
   mounted () {

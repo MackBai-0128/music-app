@@ -147,7 +147,8 @@
               </div>
             </div>
             <div class="play-btn">
-              <i class="icon-bofang1" @click="onPlay(item)"></i>
+              <i class="icon-bofang1" @click="onPlay(item)" v-if="currentMusic.id !== item.id"></i>
+              <i class="icon-yinliang" @click="$router.push('/play')" v-else></i>
             </div>
           </li>
         </ul>
@@ -167,7 +168,7 @@ import {
   topList,
   recommend
 } from '@/api/song'
-// import { djprogram, djUrl } from '@/api/dj'
+import { djprogram, djUrl } from '@/api/dj'
 import eventBus from '@/utils/eventBus'
 import { mapGetters, mapMutations } from 'vuex'
 export default {
@@ -190,14 +191,14 @@ export default {
     }),
     // 播放
     onPlay (item) {
-      console.log(item)
-      // this.$router.push('/play')
       this.setPlayList([item])
       eventBus.$emit('play', item.id)
     },
     // 每日推荐(需要登录)
     async getResource () {
       const { data } = await recommend()
+      console.log(data.data.dailySongs)
+
       this.dailyList = data.data.dailySongs
     },
     // 排行榜
@@ -210,17 +211,17 @@ export default {
       const { data } = await topSong({ type: 7 })
       console.log('新歌速递', data)
     },
-    // // 获取电台地址
-    // async getDjUrl (id) {
-    //   const { data } = await djUrl({ id })
-    //   console.log(data)
-    // },
-    // // 获取推荐电台
-    // async getDjprogram () {
-    //   const { data } = await djprogram()
-    //   console.log(data.result)
-    //   this.getDjUrl(data.result[0].id)
-    // },
+    // 获取电台地址
+    async getDjUrl (id) {
+      const { data } = await djUrl({ id })
+      console.log(data)
+    },
+    // 获取推荐电台
+    async getDjprogram () {
+      const { data } = await djprogram()
+      console.log(data.result)
+      this.getDjUrl(data.result[0].id)
+    },
     // 歌单广告
     onSongsSquare () {
       console.log('歌单广场')
@@ -266,10 +267,10 @@ export default {
     this.getBanner()
     this.getPersonalized()
     this.getNewSong()
-    this.getTopSong()
-    this.getTopList()
+    // this.getTopSong()
+    // this.getTopList()
     this.getResource()
-    // this.getDjprogram()
+    this.getDjprogram()
   },
   mounted () {},
   computed: {
@@ -315,13 +316,6 @@ export default {
     padding: 8px;
     border-radius: 50%;
     font-size: 20px;
-  }
-}
-// 阴雨推荐
-.my-swipe1 {
-  // width: 90vw;
-  /deep/ .van-swipe-item {
-    // width: 350px !important;
   }
 }
 
@@ -509,8 +503,6 @@ export default {
     .logo {
       border-radius: 5px;
       overflow: hidden;
-      img {
-      }
     }
   }
 }

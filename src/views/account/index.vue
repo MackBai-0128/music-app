@@ -26,7 +26,7 @@
       <div class="sy-five-money">首页仅5元</div>
     </div>
     <div class="login">
-      <div class="login-btn" v-if="!musicToken">
+      <div class="login-btn" v-if="!loginStatus">
         <p>手机电脑多端同步，尽享海量高品质音乐</p>
         <van-button
           size="small"
@@ -54,6 +54,8 @@
 <script>
 import { mapGetters, mapMutations } from 'vuex'
 import { logout } from '@/api/login'
+import { removeToken } from '@/utils/util'
+
 export default {
   name: 'account',
   props: {},
@@ -70,9 +72,10 @@ export default {
         message: '您确定要退出登录吗？'
       })
       const { data } = await logout()
+      console.log(data)
       if (data.code === 200) {
         this.$toast('退出成功')
-        this.setMusicToken(null)
+        removeToken('music-token')
       }
     },
     ...mapMutations({
@@ -82,7 +85,7 @@ export default {
   created () {},
   mounted () {},
   computed: {
-    ...mapGetters(['artists', 'currentMusic', 'maxTime', 'currentTime', 'musicToken', 'profile']),
+    ...mapGetters(['loginStatus', 'artists', 'currentMusic', 'maxTime', 'currentTime', 'musicToken', 'profile']),
     currentRate: {
       get () {
         return (this.currentTime / this.maxTime) * 100

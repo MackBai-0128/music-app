@@ -20,7 +20,7 @@ export function parseLyric (lrc) {
   }
   return lyric
 }
-
+// 数字过滤
 export function changeNumber (val) {
   if (!val) {
     return
@@ -36,4 +36,16 @@ export function changeNumber (val) {
     newVal = newVal + '万'
   }
   return newVal
+}
+// 时间过滤
+export function time (val) {
+  var secondType = typeof val
+  if (secondType === 'number' || secondType === 'string') {
+    val = parseInt(val)
+    var mimute = Math.floor(val / 60)
+    val = val - mimute * 60
+    return ('0' + mimute).slice(-2) + ':' + ('0' + val).slice(-2)
+  } else {
+    return '00:00'
+  }
 }

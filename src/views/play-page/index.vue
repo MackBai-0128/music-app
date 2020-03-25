@@ -156,6 +156,7 @@ export default {
     },
     // 下载
     onDownload () {
+      axios.defaults.withCredentials = false
       axios({
         method: 'get',
         url: this.flie.url,
@@ -176,6 +177,7 @@ export default {
         link.click()
         // 下载完毕后删除节点
         document.body.removeChild(link)
+        // axios.defaults.withCredentials = true
       })
     },
     // 滑动条

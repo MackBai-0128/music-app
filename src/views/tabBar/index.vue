@@ -42,7 +42,7 @@ export default {
 
 <style scoped lang="less">
 .tabBar {
-  padding-bottom: 56px;
+  padding-bottom: 49px;
 }
 .active {
   color: #fff !important;

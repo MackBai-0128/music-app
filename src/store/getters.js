@@ -28,8 +28,8 @@ export const maxTime = state => {
   return state.maxTime
 }
 // 登录token
-export const musicToken = state => {
-  return state.musicToken
+export const loginStatus = state => {
+  return state.loginStatus
 }
 // 用户信息
 export const profile = state => {

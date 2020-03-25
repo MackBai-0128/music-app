@@ -63,8 +63,8 @@
       </ul>-->
       <div class="new-mv">最新MV</div>
       <ul class="mv-container">
-        <li class="mv-item" v-for="(item,index) in newMvList" :key="item.id" @click="onShow(index)">
-          <div class="mv-video">
+        <li class="mv-item" v-for="(item,index) in newMvList" :key="item.id">
+          <div class="mv-video"  @click="onShow(index)">
             <div class="icon">
               <i
                 v-show="pauseBtn"

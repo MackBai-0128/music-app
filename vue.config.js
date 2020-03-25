@@ -1,4 +1,27 @@
-
+const path = require('path')
+const fs = require('fs')
+const resolve = dir => {
+  return path.join(__dirname, dir)
+}
+;(() => {
+  // 时间戳模拟版本号
+  const v = +new Date()
+  process.env.VUE_APP_VERSION = v
+  // 此处是写入.env文件中，参考链接( https://cli.vuejs.org/zh/guide/mode-and-env.html )
+  fs.writeFile(resolve('.env'), `VUE_APP_VERSION=${v}`, err => {
+    if (err) {
+      return console.error(err)
+    }
+    console.log(`版本号变量写入成功，本次为${v}`)
+  })
+  // 写入到public 的文件
+  fs.writeFile(resolve('public/v.json'), JSON.stringify({ version: v }), err => {
+    if (err) {
+      return console.error(err)
+    }
+    console.log(`版本号写入成功，本次为${v}`)
+  })
+})()
 module.exports = {
   devServer: {
     open: true,
@@ -14,7 +37,6 @@ module.exports = {
           '^/api': ''// 请求的时候使用这个api就可以
         }
       }
-
     }
   }
 }

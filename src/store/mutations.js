@@ -1,13 +1,11 @@
 
 import { setItem } from '@/utils/storage'
-import { setToken } from '@/utils/util'
 import * as types from './mutations-types'
 
 const mutations = {
   // token
-  [types.setMusicToken] (state, data) {
-    state.musicToken = data
-    setToken('music-token', state.musicToken)
+  [types.setLoginStatus] (state, data) {
+    state.loginStatus = data
   },
   // 用户信息
   [types.setUserInfo] (state, data) {

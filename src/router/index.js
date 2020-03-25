@@ -4,6 +4,24 @@ import tabBar from '../views/tabBar'
 
 Vue.use(VueRouter)
 
+// router.beforeEach((to, from, next) => {
+//   getVersion()
+//     .then(res => {
+//       if (process.env.VUE_APP_VERSION.toString() !== res.data.version.toString()) {
+//         iView.QhMessage.info({
+//           duration: 100,
+//           closable: true,
+//           content: '系统版本有更新，可按【CTRL + F5】获取最新资源！'
+//         })
+//       }
+//     })
+//     .catch(err => {
+//       console.log(err)
+//     })
+//   iView.LoadingBar.start()
+//   next()
+// })
+
 const routes = [
   {
     path: '/',
