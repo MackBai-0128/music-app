@@ -156,6 +156,7 @@ export default {
     },
     // 下载
     onDownload () {
+      // 下载需要跨域，非源无法获取cookie，这里禁止携带cookie
       axios.defaults.withCredentials = false
       axios({
         method: 'get',
@@ -177,7 +178,6 @@ export default {
         link.click()
         // 下载完毕后删除节点
         document.body.removeChild(link)
-        // axios.defaults.withCredentials = true
       })
     },
     // 滑动条

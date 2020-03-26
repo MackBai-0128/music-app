@@ -1,5 +1,9 @@
 <template>
   <div class="single">
+    <div class="loaders" v-if="isShow">
+      <vue-loaders-line-scale name="ball-beat" color="#F94949" scale="0.7"/>
+      <span class="loads">正在加载...</span>
+    </div>
     <div class="search-result" v-if="songsList.length">
       <div class="single-nav">
         <div>单曲</div>
@@ -46,6 +50,7 @@ export default {
   },
   data () {
     return {
+      isShow: true,
       value: 0,
       songsList: [],
       loading: false,
@@ -54,20 +59,25 @@ export default {
     }
   },
   components: {},
-  watch: {},
+  watch: {
+    name (val) {
+      this.songsList = []
+      this.onLoad()
+    }
+  },
   filters: {},
   methods: {
     ...mapMutations({
       setPlayList: 'setPlayList'
     }),
+    // 单曲加载
     async onLoad () {
       var songs = []
       var obj = {}
       var album = {} // 专辑
       var arr = []
       var artists = {} // 艺术家
-      // try {
-      const { data } = await search({ value: this.name, offset: this.offset })
+      const { data } = await search({ value: this.name, offset: this.offset, type: 1 })
       data.result.songs.forEach(item => {
         obj.id = item.id
         obj.name = item.name
@@ -91,6 +101,7 @@ export default {
       })
       this.songsList.push(...data.result.songs)
       this.loading = false
+      this.isShow = false
       this.offset++
       if (this.songsList.length >= data.result.songCount) {
         this.finished = true
@@ -109,7 +120,6 @@ export default {
     }
   },
   created () {
-    this.onLoad()
     eventBus.$on('onSingleAll', () => {
       this.value++
     })
@@ -118,11 +128,37 @@ export default {
   mounted () {
 
   },
-  computed: {}
+  computed: {},
+  beforeMount () { // 每次进入都会执行
+    this.onLoad()
+  },
+  activated () {
+    console.log(1)
+  },
+  deactivated () {
+    console.log(2)
+  },
+  beforeDestroy () {
+    console.log(3)
+  },
+  destroyed () {
+    console.log(4)
+  }
 }
 </script>
 
 <style scoped lang="less">
+.loaders{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 0;
+  .loads{
+    font-size: 12px;
+    color: #666;
+  }
+}
 .search-result {
   margin-top: 10px;
   .single-nav {

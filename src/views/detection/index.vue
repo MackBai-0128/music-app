@@ -21,6 +21,7 @@
         </van-circle>
       </div>
     </van-nav-bar>
+    <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
     <!-- weiper -->
     <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
       <van-swipe-item v-for="(item,index) in banners" :key="index" @click="onBanner(item)">
@@ -154,6 +155,7 @@
         </ul>
       </div>
     </template>
+    </van-pull-refresh>
     <!-- /热门歌曲 -->
     <!-- -----=================------------------------------- -->
   </div>
@@ -179,7 +181,8 @@ export default {
       banners: [1, 2],
       recommend: [],
       dailyList: [],
-      alImg: ''
+      alImg: '',
+      isLoading: false
     }
   },
   components: {},
@@ -189,6 +192,18 @@ export default {
     ...mapMutations({
       setPlayList: 'setPlayList'
     }),
+    async onRefresh () {
+      try {
+        await this.getBanner()
+        await this.getPersonalized()
+        await this.getNewSong()
+        await this.getResource()
+        await this.getDjprogram()
+        this.isLoading = false
+      } catch (error) {
+
+      }
+    },
     // 播放
     onPlay (item) {
       this.setPlayList([item])
@@ -197,8 +212,6 @@ export default {
     // 每日推荐(需要登录)
     async getResource () {
       const { data } = await recommend()
-      console.log(data.data.dailySongs)
-
       this.dailyList = data.data.dailySongs
     },
     // 排行榜
@@ -252,6 +265,7 @@ export default {
     async getBanner () {
       const { data } = await banner()
       this.banners = data.banners
+      this.isLoading = false
     },
     // 推荐歌单-为你精挑细选
     async getPersonalized () {

@@ -1,6 +1,8 @@
 <template>
   <div class="tabBar">
-    <router-view />
+    <keep-alive :include="include">
+      <router-view />
+    </keep-alive>
     <van-tabbar route active-color="#FA2A2F" v-model="active" :border="false" class="tabbar">
       <van-tabbar-item to="/">
         <i slot="icon" class="icon-wangyiyunyinlezizhi-copy" :class="active===0?'active':''"></i>发现
@@ -27,7 +29,8 @@ export default {
   props: {},
   data () {
     return {
-      active: 0
+      active: 0,
+      include: ['videoPage', 'detection', 'account', 'my', 'group']
     }
   },
   components: {},

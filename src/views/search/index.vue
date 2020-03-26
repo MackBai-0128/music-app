@@ -94,6 +94,7 @@
 import { debounce } from 'lodash'
 import { hotdetail, searchDefault, suggest } from '@/api/search'
 import { setItem, getItem, remItem } from '@/utils/storage'
+import eventBus from '@/utils/eventBus'
 export default {
   name: 'search',
   props: {},
@@ -108,6 +109,7 @@ export default {
       searchSug: {},
       // 搜索建议
       searchSuggest: []
+
     }
   },
   components: {},
@@ -163,6 +165,10 @@ export default {
     }
   },
   created () {
+    eventBus.$on('onKeyword', item => {
+      this.value = item
+      this.onSearch(this.value)
+    })
     this.getHotList()
     this.getSearchSug()
   },

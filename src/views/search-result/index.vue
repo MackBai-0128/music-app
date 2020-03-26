@@ -3,7 +3,7 @@
     <!-- 搜索框 -->
     <div class="search-field">
       <i class="icon-back" @click="$router.back()"></i>
-      <van-field v-model="name" left-icon="search" @focus="onFocus(name)">
+      <van-field v-model="newName" left-icon="search" @focus="onFocus(newName)">
         <van-icon name="close" slot="right-icon" @click.prevent="clearValue" />
       </van-field>
     </div>
@@ -11,41 +11,50 @@
     <van-tabs v-model="active" :border="false" @change="onChange">
       <van-tab title="综合">
         <keep-alive>
-          <composite :name="name" :songs="songs" :album="album" :artist="artist" />
+          <composite @onKeyword="onKeyword" @onClick="onClick" :name="newName" />
         </keep-alive>
       </van-tab>
       <van-tab title="单曲">
-        <!-- <keep-alive> -->
-          <single :name="name"/>
-        <!-- </keep-alive> -->
-      </van-tab>
-      <van-tab title="云村">
-        <div>开发中。。。{{active}}</div>
+        <keep-alive>
+          <single :name="newName" />
+        </keep-alive>
       </van-tab>
       <van-tab title="歌手">
-        <div>开发中。。。{{active}}</div>
+        <keep-alive>
+          <artist :name="newName" />
+        </keep-alive>
       </van-tab>
       <van-tab title="专辑">
-        <div>开发中。。。{{active}}</div>
+        <keep-alive>
+          <aibums :name="newName" />
+        </keep-alive>
       </van-tab>
       <van-tab title="视频">
-        <div>开发中。。。{{active}}</div>
+        <keep-alive>
+          <video-content :name="newName" />
+        </keep-alive>
       </van-tab>
-      <van-tab title="歌词">
-        <div>开发中。。。{{active}}</div>
+      <van-tab title="MV">
+        <keep-alive>
+          <mv :name="newName" />
+        </keep-alive>
       </van-tab>
       <van-tab title="主播电台">
-        <div>开发中。。。{{active}}</div>
+        <keep-alive>
+          <dj-radios :name="newName" />
+        </keep-alive>
       </van-tab>
       <van-tab title="用户">
-        <div>开发中。。。{{active}}</div>
+        <keep-alive>
+          <userprofile :name="newName" />
+        </keep-alive>
       </van-tab>
     </van-tabs>
   </div>
 </template>
 
 <script>
-import { search, searchMultimatch } from '@/api/search'
+import { searchMultimatch } from '@/api/search'
 import eventBus from '@/utils/eventBus'
 export default {
   name: 'searchList',
@@ -57,23 +66,38 @@ export default {
   },
   data () {
     return {
-      songs: [],
+      newName: this.name,
+      view: ['single'],
       active: 0,
-      // 专辑
-      album: [],
-      // 歌手
-      artist: []
+      type: 1018,
+      keepAlive: false
     }
   },
   components: {
     composite: () => import('./components/composite'),
-    single: () => import('./components/single')
+    single: () => import('./components/single'),
+    artist: () => import('./components/artists'),
+    videoContent: () => import('./components/video-content'),
+    aibums: () => import('./components/albums'),
+    djRadios: () => import('./components/dj'),
+    userprofile: () => import('./components/user'),
+    mv: () => import('./components/mv')
   },
-  watch: {},
+  watch: {
+    name (val, oldval) {
+      this.newName = val
+    }
+  },
   filters: {},
   methods: {
+    onKeyword (item) {
+      this.$router.push('/search')
+      eventBus.$emit('onKeyword', item)
+    },
+    onClick (i) {
+      this.active = i
+    },
     onChange () {
-      // console.log(1)
     },
     onFocus (value) {
       this.$router.push(`/search/${value}`)
@@ -81,56 +105,60 @@ export default {
     clearValue () {
       this.$router.push('/search/clear')
     },
-    async onSearch () {
-      var songs = []
-      var obj = {}
-      var album = {} // 专辑
-      var arr = []
-      var artists = {} // 艺术家
-      this.$toast.loading({
-        message: '加载中...',
-        forbidClick: true
-      })
-      try {
-        const { data } = await search({ value: this.name })
-        console.log('搜索结果', data.result)
-        data.result.songs.forEach(item => {
-          obj.id = item.id
-          obj.name = item.name
-          // 专辑
-          album.name = item.album.name
-          album.id = item.album.id
-          obj.album = album
-          // 艺术家
-          item.artists.forEach(item2 => {
-            artists.id = item2.id
-            artists.name = item2.name
-            artists.img = item2.img1v1Url
-            arr.push(artists)
-            artists = {}
-          })
-          obj.artists = arr
-          songs.push(obj)
-          arr = []
-          obj = {}
-          album = {}
-        })
-        this.songs = songs
-        this.$toast.success('加载成功')
-      } catch (error) {
-        this.$toast.fail('加载失败')
-      }
-    },
+    // 搜索
+    // async onSearch (type = 1018) {
+    //   var songs = []
+    //   var obj = {}
+    //   var album = {} // 专辑
+    //   var arr = []
+    //   var artists = {} // 艺术家
+    //   this.$toast.loading({
+    //     message: '加载中...',
+    //     forbidClick: true
+    //   })
+    //   try {
+    //     const { data } = await search({ value: this.name, type })
+    //     // console.log('搜索结果', data.result.song.songs)
+    //     data.result.song.songs.forEach(item => {
+    //       obj.id = item.id
+    //       obj.name = item.name
+    //       // 专辑
+    //       // album.name = item.album.name
+    //       // album.id = item.album.id
+    //       album.name = item.al.name
+    //       album.id = item.al.id
+    //       obj.album = album
+    //       // 艺术家
+    //       item.ar.forEach(item2 => {
+    //         artists.id = item2.id
+    //         artists.name = item2.name
+    //         artists.img = item2.picUrl
+    //         arr.push(artists)
+    //         artists = {}
+    //       })
+    //       obj.artists = arr
+    //       songs.push(obj)
+    //       arr = []
+    //       obj = {}
+    //       album = {}
+    //     })
+    //     if (this.type === 1018) {
+    //       this.songs = songs
+    //     } else if (this.type) {
+    //     }
+    //     this.$toast.success('加载成功')
+    //   } catch (error) {
+    //     this.$toast.fail('加载失败')
+    //   }
+    // },
     // 多重匹配
     async getSearchAll () {
       const { data } = await searchMultimatch(this.name)
       this.album = data.result.album
       this.artist = data.result.artist
-      // console.log(data.result)
     }
   },
   created () {
-    this.onSearch()
     this.getSearchAll()
   },
   mounted () {

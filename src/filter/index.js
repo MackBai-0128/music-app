@@ -49,3 +49,24 @@ export function time (val) {
     return '00:00'
   }
 }
+// 时间戳处理
+export function timeFilter (val) {
+  var secondType = typeof val
+  if (secondType === 'number' || secondType === 'string') {
+    val = parseInt(val / 1000)
+    var mimute = Math.floor(val / 60)
+    val = val - mimute * 60
+    return ('0' + mimute).slice(-2) + ':' + ('0' + val).slice(-2)
+  } else {
+    return '00:00'
+  }
+}
+
+// 日期处理
+export function transformTime (timestamp) {
+  var time = new Date(timestamp)
+  var y = time.getFullYear()
+  var M = time.getMonth() + 1
+  var d = time.getDate()
+  return y + '-' + (M) + '-' + (d)
+}

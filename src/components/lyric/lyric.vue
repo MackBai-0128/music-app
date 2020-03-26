@@ -1,11 +1,13 @@
 <template>
   <div>
+    <!-- <div class="test">123</div> -->
     <!--歌词-->
     <div ref="musicLyric" class="music-lyric">
       <div class="music-lyric-items" :style="lyricTop">
         <p v-if="nolyric">暂无歌词！</p>
         <template v-else-if="lyric.length>0">
           <p
+            class="item"
             v-for="(item,index) in lyric"
             :key="index"
             :class="{on:lyricIndex===index}"
@@ -40,23 +42,30 @@ export default {
   },
   data () {
     return {
-      top: 0 // 歌词居中
+      top: 0, // 歌词居中
+      itemHeight: 0
     }
   },
   computed: {
     lyricTop () {
-      return `transform :translate3d(0, ${-34 *
+      return `transform :translate3d(0, ${-this.itemHeight *
         (this.lyricIndex - this.top)}px, 0)`
     }
   },
   mounted () {
+    this.getItemHeight()
     window.addEventListener('resize', () => {
       clearTimeout(this.resizeTimer)
-      this.resizeTimer = setTimeout(() => this.clacTop(), 50)
+      this.resizeTimer = setTimeout(() => this.clacTop(), 40)
     })
     this.$nextTick(() => this.clacTop())
   },
   methods: {
+    // 获取p标签的高度
+    getItemHeight () {
+      var height = document.querySelector('.item')
+      this.itemHeight = height.offsetHeight
+    },
     // 计算歌词居中的 top值
     clacTop () {
       const dom = this.$refs.musicLyric
@@ -65,14 +74,18 @@ export default {
         return
       }
       const height = dom.offsetHeight
-      this.top = Math.floor(height / 34 / 2)
+      this.top = Math.floor(height / this.itemHeight / 2)
     }
   }
 }
 </script>
 
 <style lang="less" scoped>
+.test{
+  height: 37px;
+}
 .music-lyric {
+  position: relative;
   height: 62vh;
   position: absolute;
   top: 46px;
