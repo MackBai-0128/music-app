@@ -85,7 +85,7 @@ export default {
   created () {},
   mounted () {},
   computed: {
-    ...mapGetters(['loginStatus', 'artists', 'currentMusic', 'maxTime', 'currentTime', 'musicToken', 'profile']),
+    ...mapGetters(['loginStatus', 'artists', 'currentMusic', 'maxTime', 'currentTime', 'profile']),
     currentRate: {
       get () {
         return (this.currentTime / this.maxTime) * 100

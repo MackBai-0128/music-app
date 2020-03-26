@@ -54,7 +54,6 @@
 </template>
 
 <script>
-import { searchMultimatch } from '@/api/search'
 import eventBus from '@/utils/eventBus'
 export default {
   name: 'searchList',
@@ -67,7 +66,6 @@ export default {
   data () {
     return {
       newName: this.name,
-      view: ['single'],
       active: 0,
       type: 1018,
       keepAlive: false
@@ -97,69 +95,15 @@ export default {
     onClick (i) {
       this.active = i
     },
-    onChange () {
-    },
+    onChange () {},
     onFocus (value) {
       this.$router.push(`/search/${value}`)
     },
     clearValue () {
       this.$router.push('/search/clear')
-    },
-    // 搜索
-    // async onSearch (type = 1018) {
-    //   var songs = []
-    //   var obj = {}
-    //   var album = {} // 专辑
-    //   var arr = []
-    //   var artists = {} // 艺术家
-    //   this.$toast.loading({
-    //     message: '加载中...',
-    //     forbidClick: true
-    //   })
-    //   try {
-    //     const { data } = await search({ value: this.name, type })
-    //     // console.log('搜索结果', data.result.song.songs)
-    //     data.result.song.songs.forEach(item => {
-    //       obj.id = item.id
-    //       obj.name = item.name
-    //       // 专辑
-    //       // album.name = item.album.name
-    //       // album.id = item.album.id
-    //       album.name = item.al.name
-    //       album.id = item.al.id
-    //       obj.album = album
-    //       // 艺术家
-    //       item.ar.forEach(item2 => {
-    //         artists.id = item2.id
-    //         artists.name = item2.name
-    //         artists.img = item2.picUrl
-    //         arr.push(artists)
-    //         artists = {}
-    //       })
-    //       obj.artists = arr
-    //       songs.push(obj)
-    //       arr = []
-    //       obj = {}
-    //       album = {}
-    //     })
-    //     if (this.type === 1018) {
-    //       this.songs = songs
-    //     } else if (this.type) {
-    //     }
-    //     this.$toast.success('加载成功')
-    //   } catch (error) {
-    //     this.$toast.fail('加载失败')
-    //   }
-    // },
-    // 多重匹配
-    async getSearchAll () {
-      const { data } = await searchMultimatch(this.name)
-      this.album = data.result.album
-      this.artist = data.result.artist
     }
   },
   created () {
-    this.getSearchAll()
   },
   mounted () {
     eventBus.$on('onSingleAll', () => {

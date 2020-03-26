@@ -1,13 +1,12 @@
 <template>
   <div class="composite">
     <div class="loaders" v-if="isShow">
-      <vue-loaders-line-scale name="ball-beat" color="#F94949" scale="0.7"/>
+      <vue-loaders-line-scale name="ball-beat" color="#F94949" scale="0.7" />
       <span class="loads">正在加载...</span>
     </div>
     <template v-else>
       <!-- 你可能感兴趣 -->
       <div class="interest" v-if="albumList.length || artistList.length">
-        <!--  -->
         <p>你可能感兴趣</p>
         <div class="interest-item">
           <!-- 歌手 -->
@@ -78,14 +77,15 @@
               <i class="icon-caidan-dian"></i>
             </div>
           </li>
-          <li class="songs-all" @click="onClick(1)">
+          <li class="songs-all" @click="onClick(1)" v-if="song.moreText">
             {{song.moreText}}
             <i class="icon-right"></i>
           </li>
+          <li class="songs-all" v-else>暂无更多</li>
         </ul>
       </div>
       <!-- 视频 -->
-      <div class="search-result-video">
+      <div class="search-result-video" v-if="videos.videos">
         <div class="se-title">视频</div>
         <ul class="video-container">
           <li class="video-item" v-for="item in videos.videos" :key="item.vid">
@@ -94,7 +94,7 @@
                 <i class="icon-bofang"></i>
                 <span>{{item.playTime | changeNumber}}</span>
               </div>
-              <img :src="item.coverUrl" alt />
+              <img :src="item.coverUrl" />
             </div>
             <div class="video-title">
               <div class="video-name">
@@ -107,21 +107,26 @@
               </div>
             </div>
           </li>
-          <li class="more">
+          <li class="more" v-if="videos.moreText">
             <span @click="onClick(4)">{{videos.moreText}}</span>
             <i class="icon-right"></i>
           </li>
+          <li class="more" v-else>暂无更多</li>
         </ul>
       </div>
       <!-- 相关搜索 -->
-      <div class="search-result-query">
+      <div class="search-result-query" v-if="simQuery.sim_querys">
         <div class="se-title">相关搜索</div>
         <div class="query-container">
-          <span @click="onKeyword(item.keyword)" v-for="(item,index) in simQuery.sim_querys" :key="index">{{item.keyword}}</span>
+          <span
+            @click="onKeyword(item.keyword)"
+            v-for="(item,index) in simQuery.sim_querys"
+            :key="index"
+          >{{item.keyword}}</span>
         </div>
       </div>
       <!-- 歌手 -->
-      <div class="search-result-artist">
+      <div class="search-result-artist" v-if="artists.artists">
         <div class="se-title">歌手</div>
         <ul class="artist-container">
           <li class="artist-item" v-for="item in artists.artists" :key="item.id">
@@ -133,14 +138,15 @@
             </div>
             <div class="artist-ruzhu">已入驻</div>
           </li>
-          <li class="more">
+          <li class="more" v-if="artists.moreText">
             <span @click="onClick(2)">{{artists.moreText}}</span>
             <i class="icon-right"></i>
           </li>
+          <li class="more" v-else>暂无更多</li>
         </ul>
       </div>
       <!-- 专辑 -->
-      <div class="search-result-albums">
+      <div class="search-result-albums" v-if="albums.albums">
         <div class="se-title">专辑</div>
         <ul class="albums-container">
           <li class="albums-item" v-for="item in albums.albums" :key="item.id">
@@ -159,14 +165,15 @@
               </div>
             </div>
           </li>
-          <li class="more">
+          <li class="more" v-if="albums.moreText">
             <span @click="onClick(3)">{{albums.moreText}}</span>
             <i class="icon-right"></i>
           </li>
+          <li class="more" v-else>暂无更多</li>
         </ul>
       </div>
       <!-- 主题电台 -->
-      <div class="search-result-dj">
+      <div class="search-result-dj" v-if="djRadio.djRadios">
         <div class="se-title">电台</div>
         <ul class="dj-container">
           <li class="dj-item" v-for="item in djRadio.djRadios" :key="item.id">
@@ -180,14 +187,15 @@
               </div>
             </div>
           </li>
-          <li class="more">
+          <li class="more" v-if="djRadio.moreText">
             <span @click="onClick(6)">{{djRadio.moreText}}</span>
             <i class="icon-right"></i>
           </li>
+          <li class="more" v-else>暂无更多</li>
         </ul>
       </div>
       <!-- 用户 -->
-      <div class="search-result-user">
+      <div class="search-result-user" v-if="userprofile.users">
         <div class="se-title">用户</div>
         <ul class="user-container">
           <li class="user-item" v-for="item in userprofile.users" :key="item.userId">
@@ -201,10 +209,11 @@
               </div>
             </div>
           </li>
-          <li class="more">
+          <li class="more" v-if="userprofile.moreText">
             <span @click="onClick(7)">{{userprofile.moreText}}</span>
             <i class="icon-right"></i>
           </li>
+          <li class="more" v-else>暂无更多</li>
         </ul>
       </div>
     </template>
@@ -359,13 +368,13 @@ export default {
 </script>
 
 <style scoped lang="less">
-.loaders{
+.loaders {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 20px 0;
-  .loads{
+  .loads {
     font-size: 12px;
     color: #666;
   }
@@ -679,13 +688,15 @@ export default {
   right: -6px;
 }
 .more {
+  font-size: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #666;
   padding: 10px;
   span {
-    font-size: 12px;
     color: #666;
+    font-size: 12px;
   }
   i {
     font-size: 12px;

@@ -22,139 +22,146 @@
       </div>
     </van-nav-bar>
     <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
-    <!-- weiper -->
-    <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
-      <van-swipe-item v-for="(item,index) in banners" :key="index" @click="onBanner(item)">
-        <img :src="item.imageUrl" />
-      </van-swipe-item>
-    </van-swipe>
-    <!-- nav -->
-    <van-grid :border="false" column-num="5">
-      <van-grid-item @click="onNavs(1)" icon="photo-o" text="每日推荐">
-        <div slot="icon" class="slot-icon">
-          <div class="slot-icon-item icon-rili"></div>
-        </div>
-      </van-grid-item>
-      <van-grid-item @click="onNavs(2)" icon="photo-o" text="歌单">
-        <div slot="icon" class="slot-icon">
-          <div class="slot-icon-item icon-gedan1"></div>
-        </div>
-      </van-grid-item>
-      <van-grid-item @click="onNavs(3)" icon="photo-o" text="排行榜">
-        <div slot="icon" class="slot-icon">
-          <div class="slot-icon-item icon-paihang"></div>
-        </div>
-      </van-grid-item>
-      <van-grid-item @click="onNavs(4)" icon="photo-o" text="电台">
-        <div slot="icon" class="slot-icon">
-          <div class="slot-icon-item icon-diantai"></div>
-        </div>
-      </van-grid-item>
-      <van-grid-item @click="onNavs(5)" icon="photo-o" text="直播">
-        <div slot="icon" class="slot-icon">
-          <div class="slot-icon-item icon-zhibo1"></div>
-        </div>
-      </van-grid-item>
-    </van-grid>
-    <!-- -----=================------------------------------- -->
-    <!-- 为你精挑细选 -->
-    <div class="recommend">
-      <p>推荐歌单</p>
-      <div class="recommend-2">
-        <span>为你精挑细选</span>
-        <van-button size="mini" class="btn-more" @click="onSongsSquare">查看更多</van-button>
-      </div>
-    </div>
-    <!-- 内容 -->
-    <div class="wrapper">
-      <ul class="content">
-        <li v-for="item in recommend" :key="item.id" @click="onSongList(item)">
-          <div class="logo">
-            <div class="play-count">
-              <i class="icon-bofang">{{item.playCount | changeNumber}}</i>
-            </div>
-            <img :src="item.picUrl" alt />
+      <!-- weiper -->
+      <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
+        <van-swipe-item v-for="(item,index) in banners" :key="index" @click="onBanner(item)">
+          <img :src="item.imageUrl" />
+        </van-swipe-item>
+      </van-swipe>
+      <!-- nav -->
+      <van-grid :border="false" column-num="5">
+        <van-grid-item @click="onNavs(1)" icon="photo-o" text="每日推荐">
+          <div slot="icon" class="slot-icon">
+            <div class="slot-icon-item icon-rili"></div>
           </div>
-          <div class="title">
-            <p>{{item.name}}</p>
+        </van-grid-item>
+        <van-grid-item @click="onNavs(2)" icon="photo-o" text="歌单">
+          <div slot="icon" class="slot-icon">
+            <div class="slot-icon-item icon-gedan1"></div>
           </div>
-        </li>
-      </ul>
-    </div>
-    <!-- /推荐歌单 -->
-    <!-- -----=================------------------------------- -->
-    <!-- 英语推荐 -->
-    <div class="recommend">
-      <p>风格推荐</p>
-      <div class="recommend-2">
-        <span>英语精选</span>
-        <van-button size="mini" class="btn-more">
-          <i class="icon-bofang1"></i> 播放全部
-        </van-button>
-      </div>
-    </div>
-    <!-- 内容 -->
-    <van-swipe class="my-swipe1" :show-indicators="false" :loop="false">
-      <van-swipe-item v-for="item in 5" :key="item">
-        <ul class="content-item">
-          <li v-for="item in 3" :key="item" class="item">
-            <div class="logo">
-              <img src="../../assets/img/logo.png" alt />
-            </div>
-            <div class="title">
-              <div class="title-name">
-                123
-                <span>abc</span>
-              </div>
-              <div class="title-legend">
-                <i class="icon-sq"></i> 12341
-              </div>
-            </div>
-            <div class="play-btn">
-              <i class="icon-bofang1"></i>
-            </div>
-          </li>
-        </ul>
-      </van-swipe-item>
-    </van-swipe>
-    <!-- /风格推荐 -->
-    <!-- -----=================------------------------------- -->
-    <!-- 每日推荐 -->
-    <template>
+        </van-grid-item>
+        <van-grid-item @click="onNavs(3)" icon="photo-o" text="排行榜">
+          <div slot="icon" class="slot-icon">
+            <div class="slot-icon-item icon-paihang"></div>
+          </div>
+        </van-grid-item>
+        <van-grid-item @click="onNavs(4)" icon="photo-o" text="电台">
+          <div slot="icon" class="slot-icon">
+            <div class="slot-icon-item icon-diantai"></div>
+          </div>
+        </van-grid-item>
+        <van-grid-item @click="onNavs(5)" icon="photo-o" text="直播">
+          <div slot="icon" class="slot-icon">
+            <div class="slot-icon-item icon-zhibo1"></div>
+          </div>
+        </van-grid-item>
+      </van-grid>
+      <!-- -----=================------------------------------- -->
+      <!-- 为你精挑细选 -->
       <div class="recommend">
-        <p>每日精选</p>
+        <p>推荐歌单</p>
         <div class="recommend-2">
-          <span>今日热点</span>
-          <!-- <van-button size="mini" class="btn-more">
-          <i class="icon-bofang1"></i> 播放全部
-          </van-button>-->
+          <span>为你精挑细选</span>
+          <van-button size="mini" class="btn-more" @click="onSongsSquare">查看更多</van-button>
         </div>
       </div>
-      <!-- 列表 -->
-      <div class="hot-list">
-        <ul class="content-item">
-          <li class="item" v-for="item in dailyList" :key="item.id">
+      <!-- 内容 -->
+      <div class="wrapper">
+        <ul class="content">
+          <li v-for="item in recommend" :key="item.id" @click="onSongList(item)">
             <div class="logo">
-              <img :src="item.album.picUrl" alt />
+              <div class="play-count">
+                <i class="icon-bofang">{{item.playCount | changeNumber}}</i>
+              </div>
+              <img :src="item.picUrl" alt />
             </div>
             <div class="title">
-              <div class="title-name">
-                {{item.name}}
-                <span>- {{item.artists[0].name}}</span>
-              </div>
-              <div class="title-legend">
-                <i class="icon-sq"></i>
-                {{item.album.company}}
-              </div>
-            </div>
-            <div class="play-btn">
-              <i class="icon-bofang1" @click="onPlay(item)" v-if="currentMusic.id !== item.id"></i>
-              <i class="icon-yinliang" @click="$router.push('/play')" v-else></i>
+              <p>{{item.name}}</p>
             </div>
           </li>
         </ul>
       </div>
-    </template>
+      <!-- /推荐歌单 -->
+      <!-- -----=================------------------------------- -->
+      <!-- 英语推荐 -->
+      <div class="recommend">
+        <p>风格推荐</p>
+        <div class="recommend-2">
+          <span>英语精选</span>
+          <van-button size="mini" class="btn-more">
+            <i class="icon-bofang1"></i> 播放全部
+          </van-button>
+        </div>
+      </div>
+      <!-- 内容 -->
+      <van-swipe class="my-swipe1" :show-indicators="false" :loop="false">
+        <van-swipe-item v-for="item in 5" :key="item">
+          <ul class="content-item">
+            <li v-for="item in 3" :key="item" class="item">
+              <div class="logo">
+                <img src="../../assets/img/logo.png" alt />
+              </div>
+              <div class="title">
+                <div class="title-name">
+                  123
+                  <span>abc</span>
+                </div>
+                <div class="title-legend">
+                  <i class="icon-sq"></i> 12341
+                </div>
+              </div>
+              <div class="play-btn">
+                <i class="icon-bofang1"></i>
+              </div>
+            </li>
+          </ul>
+        </van-swipe-item>
+      </van-swipe>
+      <!-- /风格推荐 -->
+      <!-- -----=================------------------------------- -->
+      <!-- 每日推荐 -->
+      <template v-if="dailyList">
+        <div class="recommend">
+          <p>每日精选</p>
+          <div class="recommend-2">
+            <span>今日热点</span>
+            <!-- <van-button size="mini" class="btn-more">
+          <i class="icon-bofang1"></i> 播放全部
+            </van-button>-->
+          </div>
+        </div>
+        <!-- 列表 -->
+        <div class="hot-list">
+          <ul class="content-item">
+            <li class="item" v-for="(item,index) in dailyList" :key="index">
+              <div class="logo">
+                <img :src="item.album.picUrl" />
+              </div>
+              <div class="title">
+                <div class="title-name">
+                  {{item.name}}
+                  <span>- {{item.artists[0].name}}</span>
+                </div>
+                <div class="title-legend">
+                  <i class="icon-sq"></i>
+                  {{item.album.company}}
+                </div>
+              </div>
+              <div class="play-btn">
+                <i
+                  class="icon-bofang1"
+                  @click="onPlay(item)"
+                  v-if="currentMusic ? currentMusic.id !== item.id : true "
+                ></i>
+                <i class="icon-yinliang" @click="$router.push('/play')" v-else></i>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </template>
+      <div class="login" v-else>
+        <van-button type="primary" @click="$router.push('/login')">登录账号获取今日推荐</van-button>
+      </div>
     </van-pull-refresh>
     <!-- /热门歌曲 -->
     <!-- -----=================------------------------------- -->
@@ -200,9 +207,7 @@ export default {
         await this.getResource()
         await this.getDjprogram()
         this.isLoading = false
-      } catch (error) {
-
-      }
+      } catch (error) {}
     },
     // 播放
     onPlay (item) {
@@ -211,8 +216,13 @@ export default {
     },
     // 每日推荐(需要登录)
     async getResource () {
-      const { data } = await recommend()
-      this.dailyList = data.data.dailySongs
+      try {
+        const { data } = await recommend()
+        console.log('每日推荐', data)
+        this.dailyList = data.data.dailySongs
+      } catch (error) {
+        this.dailyList = null
+      }
     },
     // 排行榜
     async getTopList () {
@@ -226,8 +236,8 @@ export default {
     },
     // 获取电台地址
     async getDjUrl (id) {
-      const { data } = await djUrl({ id })
-      console.log(data)
+      await djUrl({ id })
+      // console.log(data)
     },
     // 获取推荐电台
     async getDjprogram () {
@@ -281,8 +291,6 @@ export default {
     this.getBanner()
     this.getPersonalized()
     this.getNewSong()
-    // this.getTopSong()
-    // this.getTopList()
     this.getResource()
     this.getDjprogram()
   },
@@ -303,6 +311,11 @@ export default {
 .detection {
   // background-color: #ccc;
   padding-top: 46px;
+}
+.login {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
 }
 /deep/ .van-nav-bar {
   position: fixed;
@@ -496,6 +509,8 @@ export default {
     height: 24px !important;
   }
   .now-playing {
+    width: 20px;
+    height: 20px;
     overflow: hidden;
     position: absolute;
     top: 50%;
@@ -503,11 +518,10 @@ export default {
     margin-top: -10px;
     margin-left: -10px;
     border-radius: 50%;
-    width: 20px;
-    height: 20px;
     img {
-      width: 100%;
-      height: 100%;
+      min-width: 10px;
+      min-height: 10px;
+      object-fit: cover;
     }
   }
 }

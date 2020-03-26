@@ -72,12 +72,11 @@ export default {
             this.$toast(data.message)
             return
           }
-          setToken('music-token')
+          setToken('music-token', data.token)
           this.setUserInfo(data.profile)
           this.$router.back()
         } catch (error) {
           this.$toast(error.response.data.message)
-          console.log('手机错误响应', error.response)
         }
       } else {
         this.$toast('手机号或邮箱格式错误')

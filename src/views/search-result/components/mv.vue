@@ -1,77 +1,45 @@
 <template>
-   <div class="mv">
-     <div class="loaders" v-if="isShow">
-      <vue-loaders-line-scale name="ball-beat" color="#F94949" scale="0.7"/>
+  <div class="mv">
+    <div class="loaders" v-if="isShow">
+      <vue-loaders-line-scale name="ball-beat" color="#F94949" scale="0.7" />
       <span class="loads">正在加载...</span>
     </div>
-     <div class="recommend-list">
-      <!-- <div class>推荐</div> -->
-      <!-- <ul class="mv-container">
-        <li class="mv-item" v-for="(item,index) in mvList" :key="item.id" @click="onShow(index)">
-          <div class="mv-video">
-            <div class="icon">
-              <i
-                v-show="pauseBtn"
-                class="icon-bofang-bar"
-                v-if="showIndex === index"
-                @click.stop="onPause(index)"
-              ></i>
-              <i class="icon-bofang1" v-else @click.stop="onPlayMv(item.id,index)"></i>
-            </div>
-            <video style="display:neno" class="videoElm" @ended="onEnded(item.id,index)"></video>
-            <img :src="item.picUrl" />
+
+    <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="getMv">
+      <li class="mv-item" v-for="(item,index) in mvList" :key="index">
+        <div class="mv-video" @click="onShow(index)">
+          <div class="icon">
+            <i
+              v-show="pauseBtn"
+              class="icon-bofang-bar"
+              v-if="showIndex === index"
+              @click.stop="onPause(index)"
+            ></i>
+            <i class="icon-bofang1" v-else @click.stop="onPlayMv(item.id,index)"></i>
           </div>
-          <div class="mv-text">
-            <div class="text">{{item.name}}</div>
-            <div class="user-info">
-              <div class="artist-name">
-                <div class="cover">
-                  <img :src="item.picUrl" alt />
-                </div>
-                <p>{{item.artistName}}</p>
+          <video style="display:neno" class="videoElm" @ended="onEnded(item.id,index)"></video>
+          <img :src="item.cover" />
+        </div>
+        <div class="mv-text">
+          <div class="text">{{item.name}}</div>
+          <div class="user-info">
+            <div class="artist-name">
+              <div class="cover">
+                <img :src="item.cover" alt />
               </div>
-              <div class="playCount">{{item.playCount+' 次观看'}}</div>
+              <p>{{item.artistName}}</p>
             </div>
+            <div class="playCount">{{item.playCount+' 次观看'}}</div>
           </div>
-        </li>
-      </ul>-->
-      <div class="new-mv">最新MV</div>
-      <ul class="mv-container">
-        <li class="mv-item" v-for="(item,index) in newMvList" :key="item.id">
-          <div class="mv-video"  @click="onShow(index)">
-            <div class="icon">
-              <i
-                v-show="pauseBtn"
-                class="icon-bofang-bar"
-                v-if="showIndex === index"
-                @click.stop="onPause(index)"
-              ></i>
-              <i class="icon-bofang1" v-else @click.stop="onPlayMv(item.id,index)"></i>
-            </div>
-            <video style="display:neno" class="videoElm" @ended="onEnded(item.id,index)"></video>
-            <img :src="item.cover" />
-          </div>
-          <div class="mv-text">
-            <div class="text">{{item.name}}</div>
-            <div class="user-info">
-              <div class="artist-name">
-                <div class="cover">
-                  <img :src="item.cover" alt />
-                </div>
-                <p>{{item.artistName}}</p>
-              </div>
-              <div class="playCount">{{item.playCount+' 次观看'}}</div>
-            </div>
-          </div>
-        </li>
-      </ul>
-    </div>
-   </div>
+        </div>
+      </li>
+    </van-list>
+  </div>
 </template>
 
 <script>
 import { search } from '@/api/search'
-import { recommendMv, mvUrl, newMv } from '@/api/mv'
+import { mvUrl } from '@/api/mv'
 import { mapGetters } from 'vuex'
 import eventBus from '@/utils/eventBus'
 export default {
@@ -84,13 +52,15 @@ export default {
   },
   data () {
     return {
+      loading: false,
+      finished: false,
       isShow: true,
       mvList: [],
-      newMvList: [],
       showIndex: null,
       video: 'video',
       pauseBtn: true,
-      time: null
+      time: null,
+      offset: 0
     }
   },
   components: {},
@@ -98,8 +68,25 @@ export default {
   filters: {},
   methods: {
     async getMv () {
-      const { data } = await search({ value: this.name, type: 1004 })
-      console.log(data)
+      try {
+        const { data } = await search({
+          value: this.name,
+          amount: 6,
+          offset: this.offset++,
+          type: 1004
+        })
+        this.mvList.push(...data.result.mvs)
+        this.isShow = false
+        // 加载状态结束
+        this.loading = false
+        // 数据全部加载完成
+        if (this.mvList.length >= data.result.mvCount) {
+          this.finished = true
+        }
+      } catch (error) {
+        this.isShow = false
+        this.finished = true
+      }
     },
     // 暂停按钮隐藏
     onShow (index) {
@@ -149,27 +136,13 @@ export default {
         this.pauseBtn = false
       }, 3000)
     },
-    // 获取推荐mv列表
-    async getrecommendMv () {
-      const { data } = await recommendMv()
-      this.mvList = data.result
-    },
-    // 获取最新mv
-    async getNewMv () {
-      const { data } = await newMv({ limit: 30 })
-      this.newMvList = data.data
-      this.isShow = false
-    },
     // 获取mv地址
     async getMvUrl (id) {
       const { data } = await mvUrl({ id })
       console.log(data)
     }
   },
-  created () {
-    this.getrecommendMv()
-    this.getNewMv()
-  },
+  created () {},
   mounted () {},
   computed: {
     ...mapGetters(['artists', 'currentMusic', 'maxTime', 'currentTime']),
@@ -192,101 +165,104 @@ export default {
 </script>
 
 <style scoped lang="less">
-.loaders{
+.mv{
+  background-color: rgb(247, 247, 247);
+}
+.loaders {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 20px 0;
-  .loads{
+  .loads {
     font-size: 12px;
     color: #666;
   }
 }
 
-.recommend-list {
-  .new-mv {
-    padding: 0 10px;
-    background-color: #fff;
-    font-size: 18px;
+// .recommend-list {
+//   .new-mv {
+//     padding: 0 10px;
+//     background-color: #fff;
+//     font-size: 18px;
+//   }
+//   .mv-container {
+.mv-item {
+  list-style: none;
+  position: relative;
+  padding: 10px;
+  box-sizing: border-box;
+  width: 100vw;
+  margin-bottom: 8px;
+  background-color: #fff;
+  .mv-video {
+    height: 200px;
+    overflow: hidden;
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    .icon {
+      position: absolute;
+      z-index: 1;
+      top: 50%;
+      left: 50%;
+      width: 50px;
+      height: 50px;
+      margin-left: -25px;
+      margin-top: -25px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      i {
+        font-size: 26px;
+        color: #fff;
+      }
+    }
+    .videoElm {
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      position: absolute;
+    }
   }
-  .mv-container {
-    .mv-item {
-      position: relative;
-      padding: 10px;
-      box-sizing: border-box;
-      width: 100vw;
-      margin-bottom: 8px;
-      background-color: #fff;
-      .mv-video {
-        height: 200px;
-        overflow: hidden;
-        position: relative;
-        border-radius: 10px;
-        overflow: hidden;
-        .icon {
-          position: absolute;
-          z-index: 1;
-          top: 50%;
-          left: 50%;
-          width: 50px;
-          height: 50px;
-          margin-left: -25px;
-          margin-top: -25px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
+  .mv-text {
+    color: #666;
+    font-size: 14px;
+    .text {
+      font-weight: bold;
+      padding: 5px 0;
+    }
+    .user-info {
+      padding-top: 5px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid #f1f1f1;
+      .artist-name {
+        display: flex;
+        align-items: center;
+        .cover {
           border-radius: 50%;
-          i {
-            font-size: 26px;
-            color: #fff;
+          overflow: hidden;
+          width: 30px;
+          height: 30px;
+          margin-right: 8px;
+          img {
+            min-width: 30px;
+            min-height: 30px;
+            object-fit: cover;
           }
-        }
-        .videoElm {
-          width: 100%;
-          height: 100%;
-          z-index: 0;
-          position: absolute;
         }
       }
-      .mv-text {
-        color: #666;
-        font-size: 14px;
-        .text {
-          font-weight: bold;
-          padding: 5px 0;
-        }
-        .user-info {
-          padding-top: 5px;
-          height: 40px;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          border-top: 1px solid #f1f1f1;
-          .artist-name {
-            display: flex;
-            align-items: center;
-            .cover {
-              border-radius: 50%;
-              overflow: hidden;
-              width: 30px;
-              height: 30px;
-              margin-right: 8px;
-              img {
-                min-width: 30px;
-                min-height: 30px;
-                object-fit: cover;
-              }
-            }
-          }
-          .playCount {
-            font-size: 12px;
-            color: #ccc;
-          }
-        }
+      .playCount {
+        font-size: 12px;
+        color: #ccc;
       }
     }
   }
 }
-
+// }
+// }
 </style>

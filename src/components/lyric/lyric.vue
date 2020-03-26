@@ -4,7 +4,7 @@
     <!--歌词-->
     <div ref="musicLyric" class="music-lyric">
       <div class="music-lyric-items" :style="lyricTop">
-        <p v-if="nolyric">暂无歌词！</p>
+        <p v-if="nolyric" class="item">暂无歌词！</p>
         <template v-else-if="lyric.length>0">
           <p
             class="item"
@@ -13,7 +13,7 @@
             :class="{on:lyricIndex===index}"
           >{{ item.text }}</p>
         </template>
-        <p v-else>歌词加载失败！</p>
+        <p v-else class="item">歌词加载失败！</p>
       </div>
     </div>
   </div>
@@ -85,7 +85,6 @@ export default {
   height: 37px;
 }
 .music-lyric {
-  position: relative;
   height: 62vh;
   position: absolute;
   top: 46px;

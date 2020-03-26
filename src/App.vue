@@ -9,7 +9,7 @@
 </template>
 <script>
 import firstLoad from './views/first-load'
-import { status } from '@/api/login'
+import { status, refresh } from '@/api/login'
 import { mapMutations } from 'vuex'
 export default {
   data () {
@@ -24,14 +24,22 @@ export default {
   },
   methods: {
     ...mapMutations({
-      setLoginStatus: 'setLoginStatus'
+      setLoginStatus: 'setLoginStatus',
+      setUserInfo: 'setUserInfo'
     }),
+    // 刷新登录
+    async loginRefresh () {
+      await refresh()
+    },
+    // 登录状态
     async getstatus () {
       try {
         const res = await status()
-        console.log('登录状态', res)
         if (res.statusText === 'OK') {
           this.setLoginStatus(true)
+          this.setUserInfo(res.data.profile)
+        } else {
+          this.setUserInfo(null)
         }
       } catch (error) {
         console.log('未登录', error.response)
@@ -45,6 +53,7 @@ export default {
     }
   },
   created () {
+    this.loginRefresh()
     this.getstatus()
     // 浏览器刷新后去首页
     if (this.$router.path !== '/') {
