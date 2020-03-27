@@ -183,7 +183,6 @@ export default {
       })
     }
     if (to.params.name === 'clear') {
-      console.log('clear')
       next(vm => {
         vm.value = ''
       })

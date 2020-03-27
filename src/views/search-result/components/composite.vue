@@ -362,7 +362,9 @@ export default {
     this.getSearchAll()
   },
   activated () {
-    // console.log(1)
+  },
+  beforeCreate () {
+    console.log('渲染')
   }
 }
 </script>

@@ -218,7 +218,6 @@ export default {
     async getResource () {
       try {
         const { data } = await recommend()
-        console.log('每日推荐', data)
         this.dailyList = data.data.dailySongs
       } catch (error) {
         this.dailyList = null
@@ -237,17 +236,14 @@ export default {
     // 获取电台地址
     async getDjUrl (id) {
       await djUrl({ id })
-      // console.log(data)
     },
     // 获取推荐电台
     async getDjprogram () {
       const { data } = await djprogram()
-      console.log(data.result)
       this.getDjUrl(data.result[0].id)
     },
     // 歌单广告
     onSongsSquare () {
-      console.log('歌单广场')
       this.$router.push('/songslistsquare')
     },
     onSongList (item) {
