@@ -353,7 +353,10 @@ export default {
       this.artist = data.result.artist
     }
   },
-  created () {},
+  created () {
+    // this.cache = Object.create(null) // 缓存虚拟dom
+    // this.keys = [] // 缓存的虚拟dom的健集合
+  },
   mounted () {},
   computed: {},
   beforeMount () {
