@@ -1,7 +1,7 @@
 <template>
   <div class="user">
     <div class="loaders" v-if="isShow">
-      <vue-loaders-line-scale name="ball-beat" color="#F94949" scale="0.7"/>
+      <vue-loaders-line-scale name="ball-beat" color="#F94949" scale="0.7" />
       <span class="loads">正在加载...</span>
     </div>
     <!-- 用户 -->
@@ -49,23 +49,23 @@ export default {
       this.isShow = false
     }
   },
-  created () {},
+  created () {
+    this.getUser()
+  },
   mounted () {},
   computed: {},
-  beforeMount () {
-    this.getUser()
-  }
+  beforeMount () {}
 }
 </script>
 
 <style scoped lang="less">
-.loaders{
+.loaders {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 20px 0;
-  .loads{
+  .loads {
     font-size: 12px;
     color: #666;
   }

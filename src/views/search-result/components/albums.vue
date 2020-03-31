@@ -1,10 +1,10 @@
 <template>
-   <div class="albums">
-     <div class="loaders" v-if="isShow">
-      <vue-loaders-line-scale name="ball-beat" color="#F94949" scale="0.7"/>
+  <div class="albums">
+    <div class="loaders" v-if="isShow">
+      <vue-loaders-line-scale name="ball-beat" color="#F94949" scale="0.7" />
       <span class="loads">正在加载...</span>
     </div>
-     <div class="search-result-albums">
+    <div class="search-result-albums">
       <ul class="albums-container">
         <li class="albums-item" v-for="item in albums" :key="item.id">
           <div class="albums-cover">
@@ -12,7 +12,10 @@
             <img :src="item.picUrl" alt />
           </div>
           <div class="albums-title">
-            <div class="albums-name">{{item.name}} <span>{{item.alias[0]}}</span> </div>
+            <div class="albums-name">
+              {{item.name}}
+              <span>{{item.alias[0]}}</span>
+            </div>
             <div class="albums-time">
               <span>{{item.artist.name}}</span>
               <span class="time">{{item.publishTime | transformTime}}</span>
@@ -21,7 +24,7 @@
         </li>
       </ul>
     </div>
-   </div>
+  </div>
 </template>
 
 <script>
@@ -50,23 +53,23 @@ export default {
       this.isShow = false
     }
   },
-  created () {},
+  created () {
+    this.getAibums()
+  },
   mounted () {},
   computed: {},
-  beforeMount () {
-    this.getAibums()
-  }
+  beforeMount () {}
 }
 </script>
 
 <style scoped lang="less">
-.loaders{
+.loaders {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 20px 0;
-  .loads{
+  .loads {
     font-size: 12px;
     color: #666;
   }
@@ -95,7 +98,7 @@ export default {
       .albums-name,
       .dj-name {
         font-size: 16px;
-        span{
+        span {
           color: #999;
         }
       }
@@ -103,7 +106,7 @@ export default {
         padding: 3px 0;
         font-size: 12px;
         color: #666;
-        .time{
+        .time {
           margin-left: 8px;
         }
       }

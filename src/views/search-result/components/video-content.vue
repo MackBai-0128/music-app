@@ -1,10 +1,10 @@
 <template>
-   <div class="video-content">
-     <div class="loaders" v-if="isShow">
-      <vue-loaders-line-scale name="ball-beat" color="#F94949" scale="0.7"/>
+  <div class="video-content">
+    <div class="loaders" v-if="isShow">
+      <vue-loaders-line-scale name="ball-beat" color="#F94949" scale="0.7" />
       <span class="loads">正在加载...</span>
     </div>
-     <!-- 视频 -->
+    <!-- 视频 -->
     <div class="search-result-video">
       <ul class="video-container">
         <li class="video-item" v-for="item in videos" :key="item.vid">
@@ -16,7 +16,10 @@
             <img :src="item.coverUrl" alt />
           </div>
           <div class="video-title">
-            <div class="video-name"><i class="icon-MV" v-if="item.type===0"></i> {{item.title}}</div>
+            <div class="video-name">
+              <i class="icon-MV" v-if="item.type===0"></i>
+              {{item.title}}
+            </div>
             <div class="video-xinxi">
               <span>{{item.durationms | timeFilter}},</span>
               <span v-for="creator in item.creator" :key="creator.userId">{{creator.userName}}</span>
@@ -25,7 +28,7 @@
         </li>
       </ul>
     </div>
-   </div>
+  </div>
 </template>
 
 <script>
@@ -55,27 +58,25 @@ export default {
       this.isShow = false
     }
   },
-  created () {},
-  mounted () {},
-  computed: {},
-  beforeMount () {
+  created () {
     this.getVideo()
   },
-  activated () {
-  },
-  deactivated () {
-  }
+  mounted () {},
+  computed: {},
+  beforeMount () {},
+  activated () {},
+  deactivated () {}
 }
 </script>
 
 <style scoped lang="less">
-.loaders{
+.loaders {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 20px 0;
-  .loads{
+  .loads {
     font-size: 12px;
     color: #666;
   }
@@ -94,7 +95,7 @@ export default {
       flex: 0 0 auto;
       width: 120px;
       height: 70px;
-      img{
+      img {
         min-width: 120px;
         min-height: 70px;
         object-fit: cover;
@@ -122,7 +123,7 @@ export default {
       .video-name {
         font-size: 14px;
         padding: 2px 0;
-        i{
+        i {
           color: red;
         }
       }

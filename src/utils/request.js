@@ -2,7 +2,7 @@
  * @Author: MackBai
  * @Date: 2020-03-14 14:52:12
  * @LastEditors: MackBai
- * @LastEditTime: 2020-03-25 16:00:41
+ * @LastEditTime: 2020-03-31 18:16:31
  * @FilePath: /music-app/src/utils/request.js
  * @Description: axios
  */
@@ -10,7 +10,7 @@ import axios from 'axios'
 axios.defaults.withCredentials = true
 const request = axios.create({
   baseURL: '/api',
-  timeout: 5000,
+  timeout: 15000,
   headers: { 'X-Real-IP': '192.168.0.106' }
   // 'Access-Control-Allow-Origin': 'http://192.168.0.106:8080',
   // 'Access-Control-Allow-Credentials': 'true',

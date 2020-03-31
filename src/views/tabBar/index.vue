@@ -1,8 +1,9 @@
 <template>
   <div class="tabBar">
-    <keep-alive :include="include">
-      <router-view />
+    <keep-alive>
+      <router-view v-if="$route.meta.keepAlive"></router-view>
     </keep-alive>
+    <router-view v-if="!$route.meta.keepAlive" />
     <van-tabbar route active-color="#FA2A2F" v-model="active" :border="false" class="tabbar">
       <van-tabbar-item to="/">
         <i slot="icon" class="icon-wangyiyunyinlezizhi-copy" :class="active===0?'active':''"></i>发现

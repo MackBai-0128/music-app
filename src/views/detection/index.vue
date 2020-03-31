@@ -153,7 +153,7 @@
                   @click="onPlay(item)"
                   v-if="currentMusic ? currentMusic.id !== item.id : true "
                 ></i>
-                <i class="icon-yinliang" @click="$router.push('/play')" v-else></i>
+                <img src="../../svg-loaders/audio.svg" v-else @click="$router.push('/play')" />
               </div>
             </li>
           </ul>
@@ -456,11 +456,11 @@ export default {
     font-size: 12px;
     width: 20px;
     height: 20px;
-    border-radius: 50%;
-    border: 1px solid #f3f3f3;
     display: flex;
     justify-content: center;
     align-items: center;
+    border-radius: 50%;
+    // border: 1px solid #f3f3f3;
     i {
       font-size: 12px;
       color: #f23121;
@@ -533,5 +533,8 @@ export default {
 // 正在播放logo旋转
 .animation {
   animation: myRotate 20s linear infinite;
+}
+.less {
+  border: none;
 }
 </style>

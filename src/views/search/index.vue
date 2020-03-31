@@ -11,6 +11,7 @@
         @search="onSearch"
         @cancel="$router.replace('/')"
         @input="enterKeyword"
+        ref="myInput"
       />
     </form>
     <!-- 搜索联想 -->
@@ -179,6 +180,7 @@ export default {
     if (from.params.name) {
       next(vm => {
         vm.value = from.params.name
+        document.querySelector('.van-field__control').focus()
         vm.enterKeyword(from.params.name)
       })
     }

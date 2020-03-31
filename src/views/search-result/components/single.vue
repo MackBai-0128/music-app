@@ -59,12 +59,7 @@ export default {
     }
   },
   components: {},
-  watch: {
-    name (val) {
-      this.songsList = []
-      this.onLoad()
-    }
-  },
+  watch: {},
   filters: {},
   methods: {
     ...mapMutations({
@@ -127,7 +122,6 @@ export default {
     eventBus.$on('onSingleAll', () => {
       this.value++
     })
-    // this.onSearch()
   },
   mounted () {},
   computed: {},

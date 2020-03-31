@@ -354,18 +354,15 @@ export default {
     }
   },
   created () {
-    // this.cache = Object.create(null) // 缓存虚拟dom
-    // this.keys = [] // 缓存的虚拟dom的健集合
+    this.onSearch()
+    this.getSearchAll()
   },
   mounted () {},
   computed: {},
   beforeMount () {
     // 每次进入都会执行
-    this.onSearch()
-    this.getSearchAll()
   },
-  activated () {
-  },
+  activated () {},
   beforeCreate () {
     console.log('渲染')
   }

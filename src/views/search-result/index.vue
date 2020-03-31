@@ -10,44 +10,28 @@
     <!-- 标签导航 -->
     <van-tabs v-model="active" :border="false" @change="onChange">
       <van-tab title="综合">
-        <keep-alive>
-          <composite @onKeyword="onKeyword" @onClick="onClick" :name="newName" />
-        </keep-alive>
+        <composite v-if="componentIsShow.compositeShow" @onKeyword="onKeyword" @onClick="onClick" :name="newName" />
       </van-tab>
       <van-tab title="单曲">
-        <keep-alive>
-          <single :name="newName" />
-        </keep-alive>
+        <single v-if="componentIsShow.singleShow" :name="newName" />
       </van-tab>
       <van-tab title="歌手">
-        <keep-alive>
-          <artist :name="newName" />
-        </keep-alive>
+        <artist v-if="componentIsShow.artistShow" :name="newName" />
       </van-tab>
       <van-tab title="专辑">
-        <keep-alive>
-          <aibums :name="newName" />
-        </keep-alive>
+        <aibums v-if="componentIsShow.aibumsShow" :name="newName" />
       </van-tab>
       <van-tab title="视频">
-        <keep-alive>
-          <video-content :name="newName" />
-        </keep-alive>
+        <video-content v-if="componentIsShow.videoShow" :name="newName" />
       </van-tab>
       <van-tab title="MV">
-        <keep-alive>
-          <mv :name="newName" />
-        </keep-alive>
+        <mv v-if="componentIsShow.myShow" :name="newName" />
       </van-tab>
       <van-tab title="主播电台">
-        <keep-alive>
-          <dj-radios :name="newName" />
-        </keep-alive>
+        <dj-radios v-if="componentIsShow.djShow" :name="newName" />
       </van-tab>
       <van-tab title="用户">
-        <keep-alive>
-          <userprofile :name="newName" />
-        </keep-alive>
+        <userprofile v-if="componentIsShow.userprofileShow" :name="newName" />
       </van-tab>
     </van-tabs>
   </div>
@@ -68,7 +52,17 @@ export default {
       newName: this.name,
       active: 0,
       type: 1018,
-      keepAlive: false
+      keepAlive: false,
+      componentIsShow: {
+        compositeShow: true,
+        singleShow: true,
+        artistShow: true,
+        aibumsShow: true,
+        videoShow: true,
+        myShow: true,
+        djShow: true,
+        userprofileShow: true
+      }
     }
   },
   components: {
@@ -83,7 +77,11 @@ export default {
   },
   watch: {
     name (val, oldval) {
+      Object.keys(this.componentIsShow).forEach((key) => {
+        this.componentIsShow[key] = false
+      })
       this.newName = val
+      this.componentIsShow.compositeShow = true
     }
   },
   filters: {},
@@ -95,7 +93,38 @@ export default {
     onClick (i) {
       this.active = i
     },
-    onChange () {},
+    onChange (index) {
+      // if (!this.resShow) {
+      switch (this.active) {
+        case 0:
+          this.componentIsShow.compositeShow = true
+          break
+        case 1:
+          this.componentIsShow.singleShow = true
+          break
+        case 2:
+          this.componentIsShow.artistShow = true
+          break
+        case 3:
+          this.componentIsShow.aibumsShow = true
+          break
+        case 4:
+          this.componentIsShow.videoShow = true
+          break
+        case 5:
+          this.componentIsShow.myShow = true
+          break
+        case 6:
+          this.componentIsShow.djShow = true
+          break
+        case 7:
+          this.componentIsShow.userprofileShow = true
+          break
+        default:
+          break
+      }
+      // }
+    },
     onFocus (value) {
       this.$router.push(`/search/${value}`)
     },
@@ -103,8 +132,7 @@ export default {
       this.$router.push('/search/clear')
     }
   },
-  created () {
-  },
+  created () {},
   mounted () {
     eventBus.$on('onSingleAll', () => {
       this.active = 1

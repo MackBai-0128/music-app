@@ -142,7 +142,9 @@ export default {
       console.log(data)
     }
   },
-  created () {},
+  created () {
+    this.getMv()
+  },
   mounted () {},
   computed: {
     ...mapGetters(['artists', 'currentMusic', 'maxTime', 'currentTime']),
@@ -158,14 +160,12 @@ export default {
     this.showIndex = null
     next()
   },
-  beforeMount () {
-    this.getMv()
-  }
+  beforeMount () {}
 }
 </script>
 
 <style scoped lang="less">
-.mv{
+.mv {
   background-color: rgb(247, 247, 247);
 }
 .loaders {

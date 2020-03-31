@@ -1,17 +1,17 @@
 <template>
-   <div class="dj">
-     <div class="loaders" v-if="isShow">
-      <vue-loaders-line-scale name="ball-beat" color="#F94949" scale="0.7"/>
+  <div class="dj">
+    <div class="loaders" v-if="isShow">
+      <vue-loaders-line-scale name="ball-beat" color="#F94949" scale="0.7" />
       <span class="loads">正在加载...</span>
     </div>
-     <div class="search-result-dj">
+    <div class="search-result-dj">
       <ul class="dj-container">
         <li class="dj-item" v-for="item in djRadios" :key="item.id">
           <div class="dj-cover">
             <img :src="item.picUrl" alt />
           </div>
           <div class="dj-title">
-            <div class="dj-name"> {{item.name}}</div>
+            <div class="dj-name">{{item.name}}</div>
             <div class="dj-time">
               <span>{{item.dj.nickname}}</span>
             </div>
@@ -19,7 +19,7 @@
         </li>
       </ul>
     </div>
-   </div>
+  </div>
 </template>
 
 <script>
@@ -48,24 +48,23 @@ export default {
       this.isShow = false
     }
   },
-  created () {},
+  created () {
+    this.getDj()
+  },
   mounted () {},
   computed: {},
-  beforeMount () {
-    this.getDj()
-  }
-
+  beforeMount () {}
 }
 </script>
 
 <style scoped lang="less">
-.loaders{
+.loaders {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 20px 0;
-  .loads{
+  .loads {
     font-size: 12px;
     color: #666;
   }
@@ -94,7 +93,7 @@ export default {
       margin-left: 15px;
       .dj-name {
         font-size: 16px;
-        span{
+        span {
           color: #999;
         }
       }
@@ -102,7 +101,7 @@ export default {
         padding: 3px 0;
         font-size: 12px;
         color: #666;
-        .time{
+        .time {
           margin-left: 8px;
         }
       }
