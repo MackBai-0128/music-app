@@ -87,13 +87,6 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  // console.log(to, from)
-  if (to.name === 'search') {
-    // console.log(router.matcher)
-    // console.log('to')
-  } else {
-    // console.log('2')
-  }
   next()
 })
 
