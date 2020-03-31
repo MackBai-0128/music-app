@@ -94,7 +94,6 @@ export default {
       this.active = i
     },
     onChange (index) {
-      // if (!this.resShow) {
       switch (this.active) {
         case 0:
           this.componentIsShow.compositeShow = true
@@ -123,7 +122,6 @@ export default {
         default:
           break
       }
-      // }
     },
     onFocus (value) {
       this.$router.push(`/search/${value}`)

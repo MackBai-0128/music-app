@@ -2,7 +2,7 @@
  * @Author: MackBai
  * @Date: 2020-03-14 14:52:12
  * @LastEditors: MackBai
- * @LastEditTime: 2020-03-31 18:16:31
+ * @LastEditTime: 2020-03-31 18:30:36
  * @FilePath: /music-app/src/utils/request.js
  * @Description: axios
  */
@@ -20,9 +20,6 @@ const request = axios.create({
 // 请求
 request.interceptors.request.use(
   function (config) {
-    // config.headers = {
-    //   'X-Real-IP': '211.161.244.70'
-    // }
     return config
   },
   function (err) {

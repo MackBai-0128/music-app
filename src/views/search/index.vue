@@ -173,7 +173,10 @@ export default {
     this.getHotList()
     this.getSearchSug()
   },
-  mounted () {},
+  mounted () {
+    // input 自动聚焦
+    document.querySelector('.van-field__control').focus()
+  },
   computed: {},
 
   beforeRouteEnter (to, from, next) {
