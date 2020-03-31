@@ -72,7 +72,6 @@
 
 <script>
 import { mapGetters } from 'vuex'
-// import Lyric from 'lyric-parser'
 import eventBus from '@/utils/eventBus'
 import { parseLyric } from '@/filter'
 import { songURL, songdetail, lyric, artists } from '@/api/song'
@@ -182,7 +181,7 @@ export default {
     },
     // 滑动条
     onPlaySchedule () {
-      eventBus.$emit('currentTime', this.du)
+      // eventBus.$emit('currentTime', this.du)
     },
     // 喜欢
     onLike () {
@@ -235,6 +234,8 @@ export default {
 
   created () {
     // 获取新歌词
+  },
+  mounted () {
     eventBus.$on('onLyric', id => {
       this.getlyric(id)
       this.getSongDetail(id)
@@ -243,8 +244,6 @@ export default {
       this.getSongDetail(this.currentMusic.id)
       this.getlyric(this.currentMusic.id)
     }
-  },
-  mounted () {
     eventBus.$on('waiting', id => {
       this.getSongDetail(id)
       this.getlyric(id)

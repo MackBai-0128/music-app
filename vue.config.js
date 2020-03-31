@@ -25,7 +25,7 @@ const resolve = dir => {
 module.exports = {
   devServer: {
     open: true,
-    host: 'localhost',
+    // host: 'localhost',
     port: 8080,
     https: false,
     proxy: { // 配置跨域
