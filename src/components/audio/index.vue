@@ -195,4 +195,7 @@ export default {
 </script>
 
 <style scoped lang="less">
+.audio{
+  display: none;
+}
 </style>

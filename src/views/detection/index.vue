@@ -305,7 +305,6 @@ export default {
 
 <style scoped lang="less">
 .detection {
-  // background-color: #ccc;
   padding-top: 46px;
 }
 .login {
@@ -378,17 +377,18 @@ export default {
   width: 100%;
   overflow: hidden;
   ::-webkit-scrollbar {
+    // 兼容safari和chrome去滚动条
     display: none;
   }
   .content {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
     display: flex;
     flex-wrap: nowrap;
     overflow-y: scroll;
-    // flex-shrink: 1;
     & > li {
       flex: 0 0 auto;
       width: 100px;
-      // height: ;
       margin-right: 10px;
       .logo {
         border-radius: 5px;

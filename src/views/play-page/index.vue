@@ -139,6 +139,7 @@ export default {
     },
     // 获取歌词
     async getlyric (id) {
+      this.nolyric = true
       try {
         const { data } = await lyric(id)
         // this.lyRic = new Lyric(data.lrc.lyric).lines
