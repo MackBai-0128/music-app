@@ -7,7 +7,7 @@
         show-action
         shape="round"
         :autofocus="false"
-        :placeholder="searchSug.showKeyword"
+        :placeholder="searchSug.showKeyword?searchSug.showKeyword:'搜索音乐 视频 电台'"
         @search="onSearch"
         @cancel="$router.replace('/')"
         @input="enterKeyword"
@@ -183,6 +183,7 @@ export default {
     if (from.params.name) {
       next(vm => {
         vm.value = from.params.name
+        // 自动聚焦
         document.querySelector('.van-field__control').focus()
         vm.enterKeyword(from.params.name)
       })

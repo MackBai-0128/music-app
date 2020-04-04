@@ -92,7 +92,7 @@
             <i class="icon-bofang1"></i> 播放全部
           </van-button>
         </div>
-      </div> -->
+      </div>-->
       <!-- 内容 -->
       <!-- <van-swipe class="my-swipe1" :show-indicators="false" :loop="false">
         <van-swipe-item v-for="item in 5" :key="item">
@@ -116,7 +116,7 @@
             </li>
           </ul>
         </van-swipe-item>
-      </van-swipe> -->
+      </van-swipe>-->
       <!-- /风格推荐 -->
       <!-- -----=================------------------------------- -->
       <!-- 每日推荐 -->
@@ -283,14 +283,14 @@ export default {
       console.log('推荐新音乐', data)
     }
   },
-  created () {
+  created () {},
+  mounted () {
     this.getBanner()
     this.getPersonalized()
-    this.getNewSong()
+    // this.getNewSong()
     this.getResource()
     this.getDjprogram()
   },
-  mounted () {},
   computed: {
     ...mapGetters(['artists', 'currentMusic', 'maxTime', 'currentTime']),
     currentRate: {

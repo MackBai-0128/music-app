@@ -1,18 +1,15 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import tabBar from '../views/tabBar'
 
 Vue.use(VueRouter)
-
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: tabBar,
+    component: () => import('@/views/tabBar'),
     children: [
       {
         path: '',
-        name: '',
+        name: 'detection',
         meta: { keepAlive: true },
         component: () => import('@/views/detection')
       },
@@ -87,6 +84,7 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
+  console.log(to)
   next()
 })
 

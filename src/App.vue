@@ -49,9 +49,11 @@ export default {
     },
     timeOut () {
       this.isShow = true
-      this.timer = setTimeout(() => {
-        this.isShow = false
-      }, 5000)
+      return new Promise((resolve, reject) => {
+        this.timer = setTimeout(() => {
+          this.isShow = false
+        }, 5000)
+      })
     }
   },
   created () {
@@ -59,15 +61,16 @@ export default {
     this.getstatus()
     // 浏览器刷新后去首页
     if (this.$router.path !== '/') {
-      this.$router.replace('/')
     }
     // 页面首次加载显示页
     if (window.performance.navigation.type !== 1) {
       console.log('首次加载页面')
-      this.$router.replace('/')
       this.timeOut()
+      if (!this.isShow) {
+        this.$router.replace('/')
+      }
     } else {
-      this.$toast('刷新页面了')
+      this.$toast('刷新页面了~')
     }
   },
   mounted () {
@@ -90,7 +93,7 @@ export default {
 .fade-leave-active {
   transition: all 0.3s ease;
 }
-.fade-enter{
+.fade-enter {
   opacity: 0;
   transform: translateX(100%);
 }
