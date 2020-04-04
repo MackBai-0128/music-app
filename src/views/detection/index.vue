@@ -84,7 +84,7 @@
       <!-- /推荐歌单 -->
       <!-- -----=================------------------------------- -->
       <!-- 英语推荐 -->
-      <div class="recommend">
+      <!-- <div class="recommend">
         <p>风格推荐</p>
         <div class="recommend-2">
           <span>英语精选</span>
@@ -92,9 +92,9 @@
             <i class="icon-bofang1"></i> 播放全部
           </van-button>
         </div>
-      </div>
+      </div> -->
       <!-- 内容 -->
-      <van-swipe class="my-swipe1" :show-indicators="false" :loop="false">
+      <!-- <van-swipe class="my-swipe1" :show-indicators="false" :loop="false">
         <van-swipe-item v-for="item in 5" :key="item">
           <ul class="content-item">
             <li v-for="item in 3" :key="item" class="item">
@@ -116,7 +116,7 @@
             </li>
           </ul>
         </van-swipe-item>
-      </van-swipe>
+      </van-swipe> -->
       <!-- /风格推荐 -->
       <!-- -----=================------------------------------- -->
       <!-- 每日推荐 -->
