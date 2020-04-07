@@ -182,14 +182,10 @@ export default {
   computed: {},
 
   beforeRouteEnter (to, from, next) {
-    console.log('123', to, from)
     if (from.name === 'search-result') {
       console.log()
       next(mv => {
-        // mv.$router.replace('/search')
-        console.log(mv.$router)
       })
-      // this.$router
     }
 
     if (from.params.name) {
