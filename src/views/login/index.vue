@@ -36,6 +36,7 @@
 import { phoneLogin, emailLogin } from '@/api/login'
 import { setToken } from '@/utils/util'
 import { mapMutations } from 'vuex'
+import { emailVerify, photoVerify } from './verify'
 export default {
   name: '',
   props: {},
@@ -49,8 +50,8 @@ export default {
   watch: {},
   filters: {},
   methods: {
-    async onSubmit (values) {
-      if (/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(this.username)) {
+    async onSubmit () {
+      if (emailVerify(this.username)) {
         // 邮箱登录
         try {
           const { data } = await emailLogin({
@@ -58,10 +59,18 @@ export default {
             password: this.password
           })
           console.log('邮箱响应', data)
+          if (data.code === 502) {
+            this.$toast(data.message)
+            return
+          }
+          setToken('music-token', data.token)
+          this.setUserInfo(data.profile)
+          this.$router.back()
         } catch (error) {
           console.log('邮箱错误响应', error.response)
+          this.$toast(error.response.data.message)
         }
-      } else if (/^1(3|4|5|6|7|8|9)\d{9}$/.test(this.username)) {
+      } else if (photoVerify(this.username)) {
         try {
           // 手机登录
           const { data } = await phoneLogin({

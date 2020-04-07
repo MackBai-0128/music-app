@@ -65,6 +65,9 @@ const routes = [
   {
     path: '/play',
     name: 'play',
+    meta: {
+      transfrom: true
+    },
     component: () => import('@/views/play-page')
   },
   {

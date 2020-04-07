@@ -58,40 +58,8 @@ export default {
 .icon-jingyunyinxiaopt {
   color: #fff;
 }
-.slot-right {
-  position: relative;
-  width: 28px;
-  height: 46px;
-  box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  /deep/ .van-circle {
-    width: 24px !important;
-    height: 24px !important;
-  }
-
-  .now-playing {
-    overflow: hidden;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin-top: -10px;
-    margin-left: -10px;
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    img {
-      width: 100%;
-      height: 100%;
-    }
-  }
-}
 
 .hot-list {
   padding: 0 10px;
-}
-// 正在播放logo旋转
-.animation {
-  animation: myRotate 20s linear infinite;
 }
 </style>

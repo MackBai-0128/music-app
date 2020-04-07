@@ -3,12 +3,7 @@
     <van-nav-bar :border="false" :title="title" @click-left="$router.back()">
       <i class="icon-back" slot="left"></i>
       <!-- right -->
-      <div
-        v-if="currentMusic"
-        slot="right"
-        class="slot-right"
-        @click="$router.push('/play')"
-      >
+      <div v-if="currentMusic" slot="right" class="slot-right" @click="$router.push('/play')">
         <van-circle
           layer-color="#ebedf0"
           color="#F23832"
@@ -17,7 +12,7 @@
           :stroke-width="60"
         >
           <div slot="default" class="now-playing animation" v-if="currentMusic">
-            <img :src="artists.picUrl"/>
+            <img :src="artists.picUrl" />
           </div>
         </van-circle>
       </div>
@@ -80,6 +75,7 @@
       </div>
     </div>
     <!-- 列表 -->
+
     <div class="list">
       <div class="playlist-nav">
         <div class="left">
@@ -97,41 +93,52 @@
           </div>
         </div>
       </div>
-      <div class="playlist-container">
-        <ul class="playlist-content">
-          <li @click="onPlay(index)" class="list-item" v-for="(item,index) in tracks" :key="item.id">
-            <div class="play-serial">{{index+1}}</div>
-            <div class="play-title">
-              <div class="title">
-                <p class="song-name">{{item.name}}</p>
-                <p class="singer-name">{{item.ar[0].name}} - {{item.al.name}}</p>
-              </div>
-              <div class="operating">
-                <i class="icon-shipin1" @click.stop="onMv(item)"></i>
-                <i class="icon-caidan-dian" @click.stop="onOperating(item)"></i>
-              </div>
-            </div>
-          </li>
-          <!-- 底部收藏者 -->
-          <li class="collector">
-            <div class="left">
-              <div class="avatar">
-                <img src="../../assets/img/jujingyi.jpg" alt />
-              </div>
-              <div class="avatar">
-                <img src="../../assets/img/jujingyi.jpg" alt />
-              </div>
-              <div class="avatar">
-                <img src="../../assets/img/jujingyi.jpg" alt />
-              </div>
-            </div>
-            <div class="right">
-              <p>19234人收藏</p>
-              <i class="icon-right"></i>
-            </div>
-          </li>
-        </ul>
+      <div class="loaders" v-if="isShow">
+        <vue-loaders-line-scale name="ball-beat" color="#F94949" scale="0.7" />
+        <span class="loads">正在加载...</span>
       </div>
+      <template v-else>
+        <div class="playlist-container">
+          <ul class="playlist-content">
+            <li
+              @click="onPlay(index)"
+              class="list-item"
+              v-for="(item,index) in tracks"
+              :key="item.id"
+            >
+              <div class="play-serial">{{index+1}}</div>
+              <div class="play-title">
+                <div class="title">
+                  <p class="song-name">{{item.name}}</p>
+                  <p class="singer-name">{{item.ar[0].name}} - {{item.al.name}}</p>
+                </div>
+                <div class="operating">
+                  <i class="icon-shipin1" @click.stop="onMv(item)"></i>
+                  <i class="icon-caidan-dian" @click.stop="onOperating(item)"></i>
+                </div>
+              </div>
+            </li>
+            <!-- 底部收藏者 -->
+            <li class="collector">
+              <div class="left">
+                <div class="avatar">
+                  <img src="../../assets/img/jujingyi.jpg" alt />
+                </div>
+                <div class="avatar">
+                  <img src="../../assets/img/jujingyi.jpg" alt />
+                </div>
+                <div class="avatar">
+                  <img src="../../assets/img/jujingyi.jpg" alt />
+                </div>
+              </div>
+              <div class="right">
+                <p>19234人收藏</p>
+                <i class="icon-right"></i>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </template>
     </div>
   </div>
 </template>
@@ -150,6 +157,7 @@ export default {
   },
   data () {
     return {
+      isShow: true,
       title: '歌单',
       tracks: [],
       songs: [],
@@ -225,6 +233,7 @@ export default {
       this.Favorite = data.playlist.subscribedCount
       this.cover = data.playlist.coverImgUrl
       this.playlist = data.playlist
+      this.isShow = false
     }
   },
   created () {
@@ -235,7 +244,7 @@ export default {
     ...mapGetters(['artists', 'currentMusic', 'maxTime', 'currentTime']),
     currentRate: {
       get () {
-        return this.currentTime / this.maxTime * 100
+        return (this.currentTime / this.maxTime) * 100
       },
       set () {}
     }
@@ -555,37 +564,5 @@ export default {
       }
     }
   }
-}
-// 正在播放旋转
-.slot-right {
-  position: relative;
-  z-index: 99;
-  width: 28px;
-  height: 46px;
-  box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  /deep/ .van-circle {
-    width: 24px !important;
-    height: 24px !important;
-  }
-  .now-playing {
-    overflow: hidden;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin-top: -10px;
-    margin-left: -10px;
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    img {
-      width: 100%;
-      height: 100%;
-    }
-  }
-}
-.animation {
-  animation: myRotate 20s linear infinite;
 }
 </style>

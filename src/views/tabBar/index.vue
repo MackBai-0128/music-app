@@ -3,7 +3,9 @@
     <keep-alive>
       <router-view v-if="$route.meta.keepAlive"></router-view>
     </keep-alive>
-    <router-view v-if="!$route.meta.keepAlive" />
+    <!-- <transition :name="transitionName"> -->
+      <router-view v-if="!$route.meta.keepAlive" />
+    <!-- </transition> -->
     <van-tabbar route active-color="#FA2A2F" v-model="active" :border="false" class="tabbar">
       <van-tabbar-item to="/">
         <i slot="icon" class="icon-wangyiyunyinlezizhi-copy" :class="active===0?'active':''"></i>发现
@@ -30,12 +32,25 @@ export default {
   props: {},
   data () {
     return {
+      transitionName: '',
       active: 0,
       include: ['videoPage', 'detection', 'account', 'my', 'group']
     }
   },
   components: {},
-  watch: {},
+  watch: {
+    $route (to, from) {
+      // console.log('监测', to, from)
+      // console.log(to.meta.transfrom)
+      // if (to.meta.transfrom) {
+      //   // this.transitionName = 'enter'
+      // } else if (to.name) {
+      //   this.transitionName = 'jjj'
+      // } else {
+      //   // this.transitionName = 'leave'
+      // }
+    }
+  },
   filters: {},
   methods: {},
   created () {},
@@ -45,6 +60,24 @@ export default {
 </script>
 
 <style scoped lang="less">
+// 过渡
+// .enter-enter-active {
+//   transition: all 0.3s ease;
+// }
+// .leave-leave-active {
+//   transition: all 0.3s ease;
+// }
+// .leave-leave-active {
+//   z-index: 999;
+//   position: absolute;
+//   transform: translateX(100%);
+// }
+// .enter-enter-active {
+//   z-index: 999;
+//   position: absolute;
+//   transform: translateX(100%);
+// }
+//
 .tabBar {
   padding-bottom: 49px;
 }

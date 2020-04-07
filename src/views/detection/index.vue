@@ -177,6 +177,7 @@ import {
   topList,
   recommend
 } from '@/api/song'
+import loadPage from '@/mixins/loadPage'
 import { djprogram, djUrl } from '@/api/dj'
 import eventBus from '@/utils/eventBus'
 import { mapGetters, mapMutations } from 'vuex'
@@ -195,6 +196,7 @@ export default {
   components: {},
   watch: {},
   filters: {},
+  mixins: [loadPage],
   methods: {
     ...mapMutations({
       setPlayList: 'setPlayList'
@@ -285,6 +287,7 @@ export default {
   },
   created () {},
   mounted () {
+    this.aaaa()
     this.getBanner()
     this.getPersonalized()
     // this.getNewSong()
@@ -306,6 +309,13 @@ export default {
 <style scoped lang="less">
 .detection {
   padding-top: 46px;
+}
+.v-enter-active {
+  transition: all 0.5s ease;
+}
+.v-fade-enter,
+.v-leave-to {
+  transform: scale(600%);
 }
 .login {
   display: flex;
@@ -492,35 +502,6 @@ export default {
     }
   }
 }
-// 正在播放
-.slot-right {
-  position: relative;
-  width: 28px;
-  height: 46px;
-  box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  /deep/ .van-circle {
-    width: 24px !important;
-    height: 24px !important;
-  }
-  .now-playing {
-    width: 20px;
-    height: 20px;
-    overflow: hidden;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin-top: -10px;
-    margin-left: -10px;
-    border-radius: 50%;
-    img {
-      min-width: 10px;
-      min-height: 10px;
-      object-fit: cover;
-    }
-  }
-}
 .hot-list {
   padding: 0 10px;
   .content-item {
@@ -531,9 +512,7 @@ export default {
   }
 }
 // 正在播放logo旋转
-.animation {
-  animation: myRotate 20s linear infinite;
-}
+
 .less {
   border: none;
 }

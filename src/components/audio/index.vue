@@ -149,6 +149,10 @@ export default {
       eventBus.$on('onVideo', () => {
         this.$refs.audio.pause()
       })
+      eventBus.$on('goPlayAr', i => {
+        this.current = i
+        this.getSong(this.playlist[this.current].id)
+      })
     })
     // 上一曲
     eventBus.$on('upSong', () => {
@@ -172,7 +176,6 @@ export default {
     })
     // 拖拽进度条**未实现**
     eventBus.$on('currentTime', item => {
-      // console.log(item)
       this.audio.currentTime = item
       this.$refs.audio.currentTime = item
     })

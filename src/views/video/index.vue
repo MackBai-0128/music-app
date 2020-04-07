@@ -21,50 +21,11 @@
         </van-circle>
       </div>
     </van-nav-bar>
-    <!-- <swiper class="swiper" :options="swiperOption">
-      <swiper-slide>Slide 1</swiper-slide>
-      <swiper-slide>Slide 2</swiper-slide>
-      <swiper-slide>Slide 3</swiper-slide>
-      <swiper-slide>Slide 4</swiper-slide>
-      <swiper-slide>Slide 5</swiper-slide>
-      <swiper-slide>Slide 6</swiper-slide>
-      <swiper-slide>Slide 7</swiper-slide>
-    </swiper>-->
     <div class="recommend-list">
-      <!-- <div class>推荐</div> -->
-      <!-- <ul class="mv-container">
-        <li class="mv-item" v-for="(item,index) in mvList" :key="item.id" @click="onShow(index)">
-          <div class="mv-video">
-            <div class="icon">
-              <i
-                v-show="pauseBtn"
-                class="icon-bofang-bar"
-                v-if="showIndex === index"
-                @click.stop="onPause(index)"
-              ></i>
-              <i class="icon-bofang1" v-else @click.stop="onPlayMv(item.id,index)"></i>
-            </div>
-            <video style="display:neno" class="videoElm" @ended="onEnded(item.id,index)"></video>
-            <img :src="item.picUrl" />
-          </div>
-          <div class="mv-text">
-            <div class="text">{{item.name}}</div>
-            <div class="user-info">
-              <div class="artist-name">
-                <div class="cover">
-                  <img :src="item.picUrl" alt />
-                </div>
-                <p>{{item.artistName}}</p>
-              </div>
-              <div class="playCount">{{item.playCount+' 次观看'}}</div>
-            </div>
-          </div>
-        </li>
-      </ul>-->
       <div class="new-mv">最新MV</div>
       <ul class="mv-container">
         <li class="mv-item" v-for="(item,index) in newMvList" :key="item.id">
-          <div class="mv-video"  @click="onShow(index)">
+          <div class="mv-video" @click="onShow(index)">
             <div class="icon">
               <i
                 v-show="pauseBtn"
@@ -99,7 +60,6 @@
 import { mapGetters } from 'vuex'
 import eventBus from '@/utils/eventBus'
 import { recommendMv, mvUrl, newMv } from '@/api/mv'
-// import { swiper, swiperSlide } from 'vue-awesome-swiper'
 export default {
   name: 'videoPage',
   props: {},
@@ -131,10 +91,7 @@ export default {
       time: null
     }
   },
-  components: {
-    // swiper,
-    // swiperSlide
-  },
+  components: {},
   watch: {},
   filters: {},
   methods: {
@@ -367,33 +324,7 @@ export default {
     font-size: 20px;
   }
 }
-.slot-right {
-  position: relative;
-  width: 28px;
-  height: 46px;
-  box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  /deep/ .van-circle {
-    width: 24px !important;
-    height: 24px !important;
-  }
-  .now-playing {
-    overflow: hidden;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin-top: -10px;
-    margin-left: -10px;
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    img {
-      width: 100%;
-      height: 100%;
-    }
-  }
-}
+
 // nav-bar搜索
 .search-btn {
   width: 100%;
@@ -418,9 +349,5 @@ export default {
       font-weight: 600;
     }
   }
-}
-// 正在播放logo旋转
-.animation {
-  animation: myRotate 20s linear infinite;
 }
 </style>

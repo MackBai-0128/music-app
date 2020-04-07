@@ -3,7 +3,7 @@
     <firstLoad v-if="isShow" />
     <v-audio />
     <keep-alive>
-      <transition name="fade">
+      <transition :name="transitionName">
         <router-view v-if="!isShow" />
       </transition>
     </keep-alive>
@@ -17,7 +17,18 @@ export default {
   data () {
     return {
       isShow: false,
-      timer: null
+      timer: null,
+      // transition: true,
+      transitionName: ''
+    }
+  },
+  watch: {
+    $route (to, from) {
+      if (!to.meta.transfrom) {
+        this.transitionName = 'leave'
+      } else {
+        this.transitionName = ''
+      }
     }
   },
   components: {
@@ -57,19 +68,15 @@ export default {
     }
   },
   created () {
-    this.loginRefresh()
     this.getstatus()
-    // 浏览器刷新后去首页
-    if (this.$router.path !== '/') {
-    }
     // 页面首次加载显示页
     if (window.performance.navigation.type !== 1) {
-      console.log('首次加载页面')
       this.timeOut()
       if (!this.isShow) {
         this.$router.replace('/')
       }
     } else {
+      this.$router.replace('/')
       this.$toast('刷新页面了~')
     }
   },
@@ -89,18 +96,16 @@ export default {
 </script>
 
 <style lang="less">
-.fade-enter-active,
-.fade-leave-active {
+.enter-enter-active {
   transition: all 0.3s ease;
 }
-.fade-enter {
-  opacity: 0;
-  transform: translateX(100%);
+.leave-leave-active {
+  transition: all 0.3s ease;
 }
-.fade-leave-to {
-  opacity: 0;
-  transform: translateX(100%);
+.leave-leave-active {
+  z-index: 999;
   position: absolute;
+  transform: translateX(100%);
 }
 
 @import "./styles/animate.less";

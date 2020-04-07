@@ -168,17 +168,6 @@ export default {
 .mv {
   background-color: rgb(247, 247, 247);
 }
-.loaders {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 20px 0;
-  .loads {
-    font-size: 12px;
-    color: #666;
-  }
-}
 
 // .recommend-list {
 //   .new-mv {

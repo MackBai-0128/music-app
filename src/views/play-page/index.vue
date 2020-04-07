@@ -67,6 +67,9 @@
         </div>
       </div>
     </div>
+    <van-action-sheet title="播放列表" v-model="playListShow">
+      <ActionSheet />
+    </van-action-sheet>
   </div>
 </template>
 
@@ -77,11 +80,13 @@ import { parseLyric } from '@/filter'
 import { songURL, songdetail, lyric, artists } from '@/api/song'
 import axios from 'axios'
 import vLyric from '@/components/lyric/lyric'
+import ActionSheet from './components/ActionSheet'
 export default {
   name: 'playPage',
   props: {},
   data () {
     return {
+      playListShow: false,
       defaultImg: require('@/assets/img/timg.jpeg'),
       cycle: 1,
       isLike: false,
@@ -91,11 +96,13 @@ export default {
       lyRic: null, // 歌词
       nolyric: false, // 是否有歌词
       lyricIndex: 0, // 当前播放歌词下标
-      isLogoLyric: true
+      isLogoLyric: true,
+      mp3: {}
     }
   },
   components: {
-    vLyric
+    vLyric,
+    ActionSheet
   },
   watch: {
     currentTime (val) {
@@ -155,14 +162,21 @@ export default {
       this.artists = data.songs[0].al
     },
     // 下载
-    onDownload () {
+    async onDownload () {
+      this.$toast.loading({
+        message: '加载资源中...',
+        forbidClick: true,
+        duration: 0
+      })
+      await this.getUrl(this.currentMusic.id)
       // 下载需要跨域，非源无法获取cookie，这里禁止携带cookie
       axios.defaults.withCredentials = false
       axios({
         method: 'get',
-        url: this.flie.url,
+        url: this.mp3.url,
         responseType: 'blob'
       }).then(res => {
+        this.$toast.clear()
         if (!res) {
           return
         }
@@ -172,7 +186,7 @@ export default {
         link.href = url
         link.setAttribute(
           'download',
-          this.currentMusic.name + '.' + this.flie.type
+          this.currentMusic.name + '.' + this.mp3.type
         )
         document.body.appendChild(link)
         link.click()
@@ -224,12 +238,12 @@ export default {
     },
     // 打开播放列表
     onSongsList () {
-      console.log('onSongsList')
+      this.playListShow = true
     },
     // 测试获取歌曲url
     async getUrl (id) {
       const { data } = await songURL({ url: id })
-      console.log(data.data)
+      this.mp3 = data.data[0]
     }
   },
 
@@ -249,10 +263,6 @@ export default {
       this.getSongDetail(id)
       this.getlyric(id)
     })
-    eventBus.$on('onPlaySonglist', item => {
-      console.log(item)
-      // this.getUrl(item.id)
-    })
     eventBus.$on('onPlaySong', item => {
       this.getUrl(item.id)
     })
@@ -267,7 +277,6 @@ export default {
 .play-page {
   height: 100vh;
   overflow: hidden;
-  // background-color: #ccc;
 }
 .play-container {
   height: 100vh;
@@ -292,6 +301,7 @@ export default {
   img {
     height: 100vh;
     width: 150%;
+    // 毛玻璃
     filter: blur(18px);
     -webkit-filter: blur(18px);
   }
@@ -346,10 +356,6 @@ export default {
 .on-lyric {
   height: 20px;
   color: #fff;
-}
-
-.animation {
-  animation: myRotate 20s linear infinite;
 }
 
 .features {
