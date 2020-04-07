@@ -177,7 +177,6 @@ import {
   topList,
   recommend
 } from '@/api/song'
-import loadPage from '@/mixins/loadPage'
 import { djprogram, djUrl } from '@/api/dj'
 import eventBus from '@/utils/eventBus'
 import { mapGetters, mapMutations } from 'vuex'
@@ -196,7 +195,6 @@ export default {
   components: {},
   watch: {},
   filters: {},
-  mixins: [loadPage],
   methods: {
     ...mapMutations({
       setPlayList: 'setPlayList'
@@ -287,10 +285,8 @@ export default {
   },
   created () {},
   mounted () {
-    this.aaaa()
     this.getBanner()
     this.getPersonalized()
-    // this.getNewSong()
     this.getResource()
     this.getDjprogram()
   },

@@ -3,6 +3,10 @@ import { setItem } from '@/utils/storage'
 import * as types from './mutations-types'
 
 const mutations = {
+  // navBar
+  [types.setActiveIndex] (state, i) {
+    state.activeIndex = i
+  },
   // token
   [types.setLoginStatus] (state, data) {
     state.loginStatus = data

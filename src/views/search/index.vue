@@ -56,7 +56,7 @@
       <div class="search-history" v-if="history.length">
         <div class="search-history-title">
           <span>搜索历史</span>
-          <van-icon name="delete" @click="clearHistory"/>
+          <van-icon name="delete" @click="clearHistory" />
         </div>
         <div class="search-history-container">
           <div class="content">
@@ -110,7 +110,6 @@ export default {
       searchSug: {},
       // 搜索建议
       searchSuggest: []
-
     }
   },
   components: {},
@@ -119,12 +118,15 @@ export default {
   methods: {
     // 清空历史
     clearHistory () {
-      this.$dialog.confirm({
-        message: '确认清空全部历史记录？'
-      }).then(() => {
-        remItem('search-history')
-        this.history = []
-      }).catch(() => {})
+      this.$dialog
+        .confirm({
+          message: '确认清空全部历史记录？'
+        })
+        .then(() => {
+          remItem('search-history')
+          this.history = []
+        })
+        .catch(() => {})
     },
     // 搜索
     async onSearch (name) {
@@ -180,6 +182,16 @@ export default {
   computed: {},
 
   beforeRouteEnter (to, from, next) {
+    console.log('123', to, from)
+    if (from.name === 'search-result') {
+      console.log()
+      next(mv => {
+        // mv.$router.replace('/search')
+        console.log(mv.$router)
+      })
+      // this.$router
+    }
+
     if (from.params.name) {
       next(vm => {
         vm.value = from.params.name

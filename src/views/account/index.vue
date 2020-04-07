@@ -3,9 +3,6 @@
     <van-nav-bar :border="false">
       <i slot="left" class="icon-saoyisao1"></i>
       <div slot="title" class="search-btn">
-        <!-- <div class="content" @click="$router.push('/search')">
-          <i class="icon-fangdajing01 text"></i>大家都在搜 怎么能忘了
-        </div>-->
       </div>
       <div v-if="currentMusic" slot="right" class="slot-right" @click="$router.push('/play')">
         <van-circle

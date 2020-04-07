@@ -2,8 +2,7 @@
   <div class="my">
     <van-nav-bar :border="false">
       <i slot="left" class="icon-jingyunyinxiaopt"></i>
-      <div slot="title" class="search-btn">
-      </div>
+      <div slot="title" class="search-btn"></div>
       <div v-if="currentMusic" slot="right" class="slot-right" @click="$router.push('/play')">
         <van-circle
           layer-color="#ebedf0"
@@ -18,6 +17,9 @@
         </van-circle>
       </div>
     </van-nav-bar>
+    <div class="test">
+      开发中...
+    </div>
   </div>
 </template>
 

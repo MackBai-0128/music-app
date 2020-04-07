@@ -1,12 +1,8 @@
 <template>
-   <div class="group">
-        <van-nav-bar :border="false">
+  <div class="group">
+    <van-nav-bar :border="false">
       <i slot="left" class="icon-tianjiahaoyou-"></i>
-      <div slot="title" class="search-btn">
-        <!-- <div class="content" @click="$router.push('/search')">
-          <i class="icon-fangdajing01 text"></i>大家都在搜 怎么能忘了
-        </div>-->
-      </div>
+      <div slot="title" class="search-btn"></div>
       <div v-if="currentMusic" slot="right" class="slot-right" @click="$router.push('/play')">
         <van-circle
           layer-color="#ebedf0"
@@ -21,7 +17,10 @@
         </van-circle>
       </div>
     </van-nav-bar>
-   </div>
+    <div class="test">
+      开发中...
+    </div>
+  </div>
 </template>
 
 <script>
@@ -42,7 +41,7 @@ export default {
     ...mapGetters(['artists', 'currentMusic', 'maxTime', 'currentTime']),
     currentRate: {
       get () {
-        return this.currentTime / this.maxTime * 100
+        return (this.currentTime / this.maxTime) * 100
       },
       set (val) {}
     }
@@ -62,5 +61,4 @@ export default {
 .hot-list {
   padding: 0 10px;
 }
-
 </style>

@@ -2,11 +2,7 @@
   <div class="videoPage">
     <van-nav-bar :border="false">
       <i slot="left" class="icon-zhibo"></i>
-      <div slot="title" class="search-btn">
-        <div class="content" @click="$router.push('/search')">
-          <i class="icon-fangdajing01 text"></i>大家都在搜 怎么能忘了
-        </div>
-      </div>
+      <div slot="title" class="search-btn">MV每日推荐</div>
       <div v-if="currentMusic" slot="right" class="slot-right" @click="$router.push('/play')">
         <van-circle
           layer-color="#ebedf0"
@@ -288,12 +284,6 @@ export default {
     background-size: cover;
     color: white;
   }
-  // .swiper-pagination {
-  //   /deep/ .swiper-pagination-bullet.swiper-pagination-bullet-active {
-  //     background-color: white;
-  //     display: none;
-  //   }
-  // }
 }
 /deep/ .van-nav-bar {
   position: fixed;
@@ -331,23 +321,6 @@ export default {
   height: 46px;
   display: flex;
   align-items: center;
-  .content {
-    width: 100%;
-    height: 30px;
-    line-height: 30px;
-    background-color: #f7f7f7;
-    border-radius: 30px;
-    font-size: 14px;
-    color: #ccc;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    .text {
-      margin-right: 5px;
-      font-size: 16px;
-      color: #888;
-      font-weight: 600;
-    }
-  }
+  justify-content: center;
 }
 </style>

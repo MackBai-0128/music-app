@@ -1,6 +1,7 @@
 
 import { getItem } from '@/utils/storage'
 const state = {
+  activeIndex: 0,
   currentSong: getItem('current') ? getItem('current') : null, // 正在播放
   playlist: getItem('playlist') ? getItem('playlist') : [], // 播放列表
   artists: getItem('currently') ? getItem('currently') : {}, // 专辑信息

@@ -2,7 +2,7 @@
   <div class="search-list">
     <!-- 搜索框 -->
     <div class="search-field">
-      <i class="icon-back" @click="$router.back()"></i>
+      <i class="icon-back" @click="clearValue"></i>
       <van-field v-model="newName" left-icon="search" @focus="onFocus(newName)">
         <van-icon name="close" slot="right-icon" @click.prevent="clearValue" />
       </van-field>
@@ -127,7 +127,7 @@ export default {
       this.$router.push(`/search/${value}`)
     },
     clearValue () {
-      this.$router.push('/search/clear')
+      this.$router.replace('/search/clear')
     }
   },
   created () {},

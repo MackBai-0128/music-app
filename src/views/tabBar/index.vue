@@ -3,10 +3,15 @@
     <keep-alive>
       <router-view v-if="$route.meta.keepAlive"></router-view>
     </keep-alive>
-    <!-- <transition :name="transitionName"> -->
-      <router-view v-if="!$route.meta.keepAlive" />
-    <!-- </transition> -->
-    <van-tabbar route active-color="#FA2A2F" v-model="active" :border="false" class="tabbar">
+    <router-view v-if="!$route.meta.keepAlive" />
+    <van-tabbar
+      route
+      active-color="#FA2A2F"
+      v-model="active"
+      :border="false"
+      class="tabbar"
+      @change="onactive"
+    >
       <van-tabbar-item to="/">
         <i slot="icon" class="icon-wangyiyunyinlezizhi-copy" :class="active===0?'active':''"></i>发现
       </van-tabbar-item>
@@ -27,35 +32,33 @@
 </template>
 
 <script>
+import { mapState, mapMutations } from 'vuex'
 export default {
   name: 'tabBar',
   props: {},
   data () {
     return {
-      transitionName: '',
-      active: 0,
-      include: ['videoPage', 'detection', 'account', 'my', 'group']
+      active: 0
     }
   },
   components: {},
   watch: {
-    $route (to, from) {
-      // console.log('监测', to, from)
-      // console.log(to.meta.transfrom)
-      // if (to.meta.transfrom) {
-      //   // this.transitionName = 'enter'
-      // } else if (to.name) {
-      //   this.transitionName = 'jjj'
-      // } else {
-      //   // this.transitionName = 'leave'
-      // }
-    }
+    $route (to, from) {}
   },
   filters: {},
-  methods: {},
+  methods: {
+    ...mapMutations(['setActiveIndex']),
+    onactive () {
+      this.setActiveIndex(this.active)
+    }
+  },
   created () {},
-  mounted () {},
-  computed: {}
+  mounted () {
+    this.active = this.activeIndex
+  },
+  computed: {
+    ...mapState(['activeIndex'])
+  }
 }
 </script>
 

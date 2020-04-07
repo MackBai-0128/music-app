@@ -8,3 +8,4 @@ export const setArtists = 'setArtists' // 歌曲详情
 // export const setMusicToken = 'setMusicToken' // 设置token
 export const setUserInfo = 'setUserInfo'
 export const setLoginStatus = 'setLoginStatus'
+export const setActiveIndex = 'setActiveIndex'
