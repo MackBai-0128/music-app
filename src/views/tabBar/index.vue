@@ -63,28 +63,21 @@ export default {
 </script>
 
 <style scoped lang="less">
-// 过渡
-// .enter-enter-active {
-//   transition: all 0.3s ease;
-// }
-// .leave-leave-active {
-//   transition: all 0.3s ease;
-// }
-// .leave-leave-active {
-//   z-index: 999;
-//   position: absolute;
-//   transform: translateX(100%);
-// }
-// .enter-enter-active {
-//   z-index: 999;
-//   position: absolute;
-//   transform: translateX(100%);
-// }
-//
 .tabBar {
   padding-bottom: 49px;
 }
+/deep/ .van-tabbar-item__text {
+  font-size: 12px;
+}
 .active {
+  width: 22px;
+  height: 22px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-sizing: border-box;
   color: #fff !important;
   box-sizing: border-box;
   border-radius: 50%;

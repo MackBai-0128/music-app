@@ -18,7 +18,6 @@ export default {
     return {
       isShow: false,
       timer: null,
-      // transition: true,
       transitionName: ''
     }
   },
@@ -96,17 +95,13 @@ export default {
 </script>
 
 <style lang="less">
-.enter-enter-active {
-  transition: all 0.3s ease;
-}
+@import "./styles/animate.less";
 .leave-leave-active {
   transition: all 0.3s ease;
 }
 .leave-leave-active {
-  z-index: 999;
+  z-index: 999999;
   position: absolute;
   transform: translateX(100%);
 }
-
-@import "./styles/animate.less";
 </style>
