@@ -275,6 +275,7 @@ export default {
 
 <style scoped lang="less">
 .play-page {
+  position: relative;
   height: 100vh;
   overflow: hidden;
 }
@@ -343,6 +344,8 @@ export default {
 }
 // 封面
 .cover {
+  position: absolute;
+  top: 20vh;
   box-sizing: border-box;
   width: 200px;
   height: 200px;
@@ -361,7 +364,8 @@ export default {
 }
 
 .features {
-  // height: 190px;
+  position: fixed;
+  bottom: 0;
   background-color: rgba(65, 65, 65, 0.377);
   i {
     color: #ece4e5 !important;
