@@ -589,7 +589,4 @@ export default {
     }
   }
 }
-.my-nav-bar {
-
-}
 </style>

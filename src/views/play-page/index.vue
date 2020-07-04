@@ -17,7 +17,7 @@
             ></i>
           </p>
         </div>
-        <i class="icon-fenxiang fenxiang"></i>
+        <i class="icon-fenxiang fenxiang" @click="onShare"></i>
       </div>
       <!-- logo -->
       <div
@@ -70,6 +70,12 @@
     <van-action-sheet title="播放列表" v-model="playListShow">
       <ActionSheet />
     </van-action-sheet>
+    <van-share-sheet
+      v-model="showShare"
+      title="立即分享给好友"
+      :options="options"
+      @select="onSelect"
+    />
   </div>
 </template>
 
@@ -97,7 +103,15 @@ export default {
       nolyric: false, // 是否有歌词
       lyricIndex: 0, // 当前播放歌词下标
       isLogoLyric: true,
-      mp3: {}
+      mp3: {},
+      showShare: false,
+      options: [
+        { name: '微信', icon: 'wechat' },
+        { name: '微博', icon: 'weibo' },
+        { name: '复制链接', icon: 'link' },
+        { name: '分享海报', icon: 'poster' },
+        { name: '二维码', icon: 'qrcode' }
+      ]
     }
   },
   components: {
@@ -139,6 +153,16 @@ export default {
     }
   },
   methods: {
+    onSelect (option) {
+      console.log(option)
+      if (option.name === '微信') {
+        window.location.href = 'weixin://'
+      }
+    },
+    // 分享
+    onShare () {
+      this.showShare = true
+    },
     // test歌手信息
     async onArtists () {
       const { data } = await artists({ id: this.currentMusic.artists[0].id })
