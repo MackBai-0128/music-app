@@ -96,6 +96,11 @@ export default {
 
 <style lang="less">
 @import "./styles/animate.less";
+#app {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
 .leave-leave-active {
   transition: all 0.3s ease;
 }

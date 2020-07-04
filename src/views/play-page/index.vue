@@ -289,6 +289,8 @@ export default {
   background: linear-gradient(to top, #ff6a28, #fe2f57);
 }
 .bg-img {
+  width: 100vw;
+  height: 100vh;
   position: absolute;
   top: 0;
   left: 0;
@@ -296,14 +298,14 @@ export default {
   bottom: 0;
   z-index: -1;
   overflow: hidden;
-  background-color: rgba(0, 0, 0, 0.486);
-  background-blend-mode: darken;
+  background-color: rgb(0, 0, 0);
+  // background-blend-mode: luminosity;
   img {
     height: 100vh;
-    width: 150%;
+    width: 100vw;
     // 毛玻璃
-    filter: blur(18px);
-    -webkit-filter: blur(18px);
+    -webkit-filter: blur(50px);
+    filter: blur(50px);
   }
 }
 .nav-bar {
@@ -359,7 +361,7 @@ export default {
 }
 
 .features {
-  height: 190px;
+  // height: 190px;
   background-color: rgba(65, 65, 65, 0.377);
   i {
     color: #ece4e5 !important;
