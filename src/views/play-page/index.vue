@@ -157,6 +157,13 @@ export default {
       console.log(option)
       if (option.name === '微信') {
         window.location.href = 'weixin://'
+        // var aLink = document.createElement('a')
+        // var body = document.body
+        // aLink.href = 'weixin://'
+        // body.appendChild(aLink)
+        // aLink.click()
+      } else if (option.name === '微博') {
+        window.location.href = 'weibo://'
       }
     },
     // 分享
