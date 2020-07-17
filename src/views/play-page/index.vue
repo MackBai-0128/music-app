@@ -308,6 +308,7 @@ export default {
 .play-page {
   position: relative;
   height: 100vh;
+  width: 100vw;
   overflow: hidden;
 }
 .play-container {
@@ -321,20 +322,18 @@ export default {
   background: linear-gradient(to top, #ff6a28, #fe2f57);
 }
 .bg-img {
-  width: 100vw;
-  height: 100vh;
+  width: 120vw;
+  height: 120vh;
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  left: 50%;
+  top: 50%;
+  margin-top: -60vh;
+  margin-left: -60vw;
   z-index: -1;
-  overflow: hidden;
-  background-color: rgb(0, 0, 0);
-  // background-blend-mode: luminosity;
+  filter: brightness(0.8);
   img {
-    height: 100vh;
-    width: 100vw;
+    height: 100%;
+    width: 100%;
     // 毛玻璃
     -webkit-filter: blur(50px);
     filter: blur(50px);

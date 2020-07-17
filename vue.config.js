@@ -27,6 +27,18 @@ module.exports = {
     // })
   },
   configureWebpack: config => {
+    if (process.env.NODE_ENV === 'production') {
+      // GZIP压缩
+      // return {
+      //   plugins: [
+      //     new CompressionWebpackPlugin({
+      //       test: /\.(js|css)(\?.*)?$/i, //需要压缩的文件正则
+      //       threshold: 10240, //文件大小大于这个值时启用压缩
+      //       deleteOriginalAssets: false //压缩后保留原文件
+      //     })
+      //   ]
+      // }
+    }
     // config.resolve = { // 配置解析别名
     //   extensions: ['.js', '.json', '.vue'],
     //   alias: {
@@ -97,15 +109,19 @@ module.exports = {
     // 设置代理
     proxy: { // 配置跨域
       '/api': {
-        target: 'http://localhost:3000',
-        ws: true,
+        target: 'http://localhost:3000', // 代理地址，这里设置的地址会代替axios中设置的baseURL
+        // ws: true, // proxy websockets
         changOrigin: true, // 允许跨域
+        // pathRewrite 方法重写 url
         pathRewrite: {
-          '^/api': ''// 请求的时候使用这个api就可以
+          '^/api': '/'// 请求的时候使用这个api就可以
+          // pathRewrite: {'^/api': '/'} 重写之后url为 http://localhost:3000/xxxx
+          // pathRewrite: {'^/api': '/api'} 重写之后url为 http://localhost:3000/api/xxxx
         }
       }
     },
-    overlay: { // 全屏模式下是否显示脚本错误
+    // 全屏模式下是否显示脚本错误
+    overlay: {
       warnings: true,
       errors: true
     },
