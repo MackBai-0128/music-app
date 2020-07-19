@@ -17,7 +17,7 @@
     <!-- 搜索联想 -->
     <div class="search-keyword" v-if="value">
       <div class="search-value" @click="onSearch(value)">
-        <button>搜索 “{{value}}”</button>
+        <a>搜索 “{{value}}”</a>
       </div>
       <div class="search-keyword-item">
         <ul class="search-keyword-container">
@@ -183,7 +183,6 @@ export default {
 
   beforeRouteEnter (to, from, next) {
     if (from.name === 'search-result') {
-      console.log()
       next(mv => {
       })
     }

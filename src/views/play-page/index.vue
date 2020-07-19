@@ -1,7 +1,7 @@
 <template>
   <div class="play-page">
-    <div class="bg-img" :class="!isLogoLyric?'is-bg-color':''">
-      <img :src="artists.picUrl" v-if="isLogoLyric" />
+    <div class="bg-img">
+      <img :src="artists.picUrl" />
     </div>
     <div class="play-container">
       <!-- nav -->

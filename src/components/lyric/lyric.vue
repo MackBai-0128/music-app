@@ -60,6 +60,12 @@ export default {
     })
     this.$nextTick(() => this.clacTop())
   },
+  watch: {
+    lyricIndex () {
+      // if () {}
+      this.getItemHeight()
+    }
+  },
   methods: {
     // 获取p标签的高度
     getItemHeight () {
