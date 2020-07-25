@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-
+// function loadView(view) {
+//   return () => import(/* webpackChunkName: "view-[request]" */ `@/views/${view}.vue`)
+// }
 Vue.use(VueRouter)
 const routes = [
   {
@@ -11,54 +13,54 @@ const routes = [
         path: '',
         name: 'detection',
         meta: { keepAlive: true },
-        component: () => import('@/views/detection')
+        component: () => import(/* webpackChunkName: "detection" */ '@/views/detection')
       },
       {
         path: 'video',
         name: 'video',
         meta: { keepAlive: true },
-        component: () => import('@/views/video')
+        component: () => import(/* webpackChunkName: "video" */ '@/views/video')
       },
       {
         path: 'my',
         name: 'my',
         meta: { keepAlive: true },
-        component: () => import('@/views/my')
+        component: () => import(/* webpackChunkName: "my" */ '@/views/my')
       },
       {
         path: 'group',
         name: 'group',
         meta: { keepAlive: true },
-        component: () => import('@/views/group')
+        component: () => import(/* webpackChunkName: "group" */ '@/views/group')
       },
       {
         path: 'account',
         name: 'account',
         meta: { keepAlive: true },
-        component: () => import('@/views/account')
+        component: () => import(/* webpackChunkName: "account" */ '@/views/account')
       },
       {
         path: '/search/:name?',
         name: 'search',
-        component: () => import('@/views/search')
+        component: () => import(/* webpackChunkName: "search" */ '@/views/search')
       },
       {
         path: '/search-result/:name',
         name: 'search-result',
         meta: { keepAlive: true },
-        component: () => import('@/views/search-result'),
+        component: () => import(/* webpackChunkName: "search-result" */ '@/views/search-result'),
         props: true
       },
       {
         path: '/songlist/:id',
         name: 'songlist',
-        component: () => import('@/views/song-list'),
+        component: () => import(/* webpackChunkName: "song-list" */ '@/views/song-list'),
         props: true
       },
       {
         path: '/songslistsquare',
         name: 'songslistsquare',
-        component: () => import('@/views/song-list-square')
+        component: () => import(/* webpackChunkName: "song-list-square" */ '@/views/song-list-square')
       }
     ]
   },
@@ -73,12 +75,12 @@ const routes = [
   {
     path: '/load',
     name: 'load',
-    component: () => import('@/views/first-load')
+    component: () => import(/* webpackChunkName: "first-load" */ '@/views/first-load')
   },
   {
     path: '/login',
     name: 'login',
-    component: () => import('@/views/login')
+    component: () => import(/* webpackChunkName: "login" */ '@/views/login')
   }
 ]
 
