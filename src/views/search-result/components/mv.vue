@@ -203,7 +203,16 @@ export default {
       align-items: center;
       justify-content: center;
       border-radius: 50%;
+
       i {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 5px;
+        background-color: rgba(153, 152, 152, 0.377);
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
         font-size: 26px;
         color: #fff;
       }
