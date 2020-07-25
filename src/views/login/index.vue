@@ -173,41 +173,32 @@ export default {
   border-radius: 50%;
   z-index: 1;
   opacity: 0;
-  -webkit-animation: warn 3s ease-out;
-  -moz-animation: warn 3s ease-out;
-  animation: warn 3s ease-out;
-  -webkit-animation-iteration-count: infinite;
-  -moz-animation-iteration-count: infinite;
-  animation-iteration-count: infinite;
+  // -webkit-animation: warn 3s ease-out;
+  // -moz-animation: warn 3s ease-out;
+  // animation: warn 3s ease-out;
+  // -webkit-animation-iteration-count: infinite;
+  // -moz-animation-iteration-count: infinite;
+  // animation-iteration-count: infinite;
 }
 .pulse0 {
-  animation-delay: 02s;
+  animation: warn 1.5s infinite 0.2s;
 }
 .pulse1 {
-  animation-delay: 0.8s;
+  animation: warn 1.5s infinite 0.6s;
 }
 .pulse2 {
-  animation-delay: 1.5s;
+  animation: warn 1.5s infinite 1s;
 }
 @keyframes warn {
   0% {
     transform: scale(1);
     opacity: 0;
   }
-  25% {
-    transform: scale(1.2);
-    opacity: 0.1;
-  }
   50% {
-    transform: scale(1.5);
-    opacity: 0.3;
-  }
-  75% {
-    transform: scale(2);
-    opacity: 0.5;
+    opacity: 1;
   }
   100% {
-    transform: scale(2.6);
+    transform: scale(3);
     opacity: 0;
   }
 }
