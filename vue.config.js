@@ -1,7 +1,8 @@
 // const path = require('path')
+const TerserPlugin = require('terser-webpack-plugin')
 module.exports = {
   // 基本路径
-  publicPath: process.env.NODE_ENV === 'production' ? '' : './',
+  publicPath: process.env.NODE_ENV === 'production' ? './' : './',
   // 输出文件目录
   outputDir: process.env.NODE_ENV === 'production' ? 'dist' : 'devdist',
   // 放置生成的静态资源 (js、css、img、fonts) 的 (相对于 outputDir 的) 目录
@@ -38,6 +39,21 @@ module.exports = {
       //     })
       //   ]
       // }
+      // 打包时禁止打包conlose.log
+      config.optimization = {
+        minimizer: [
+          new TerserPlugin({
+            terserOptions: {
+              compress: {
+                drop_console: true,
+                warnings: false,
+                drop_debugger: true,
+                pure_funcs: ['console.log']
+              }
+            }
+          })
+        ]
+      }
     }
     // config.resolve = { // 配置解析别名
     //   extensions: ['.js', '.json', '.vue'],
