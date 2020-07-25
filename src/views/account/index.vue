@@ -69,7 +69,6 @@ export default {
         message: '您确定要退出登录吗？'
       })
       const { data } = await logout()
-      console.log(data)
       if (data.code === 200) {
         this.$toast('退出成功')
         removeToken('music-token')

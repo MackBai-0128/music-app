@@ -1,6 +1,6 @@
 <template>
   <div class="song-list">
-    <van-nav-bar :border="false" :title="title" @click-left="$router.back()">
+    <van-nav-bar :border="false" :title="title" @click-left="$router.back()" class="my-nav-bar">
       <i class="icon-back" slot="left"></i>
       <!-- right -->
       <div v-if="currentMusic" slot="right" class="slot-right" @click="$router.push('/play')">
@@ -18,7 +18,8 @@
       </div>
     </van-nav-bar>
     <div class="banner-bg">
-      <div class="banner" :style="{backgroundImage: 'url(' + cover + ')'}"></div>
+      <!--  -->
+      <div class="banner" style="background-size: 120%" :style="{backgroundImage: 'url(' + cover + ')'}" ref="myBanner"></div>
     </div>
     <!-- banner -->
     <div class="songlist-details">
@@ -178,6 +179,12 @@ export default {
   },
   filters: {},
   methods: {
+    handleScroll () {
+      this.$nextTick(() => {
+        var top = document.body.scrollTop || document.documentElement.scrollTop || window.pageXOffset
+        console.log(top)
+      })
+    },
     ...mapMutations({
       setPlayList: 'setPlayList'
     }),
@@ -239,7 +246,9 @@ export default {
   created () {
     this.getSongList(this.id)
   },
-  mounted () {},
+  mounted () {
+    window.addEventListener('scroll', this.handleScroll, true)
+  },
   computed: {
     ...mapGetters(['artists', 'currentMusic', 'maxTime', 'currentTime']),
     currentRate: {
@@ -284,14 +293,30 @@ export default {
   left: 0;
   overflow: hidden;
   .banner {
-    width: 100vw;
-    height: 100%;
-    background-size: 100%;
-    filter: blur(0px) brightness(90%);
-    background-size: 100%;
+    position: absolute;
+    top: -20px;
+    left: -5vw;
+    width: 110vw;
+    height: 80px;
+    -webkit-filter: blur(10px);
+    -moz-filter: blur(10px);
+    -ms-filter: blur(10px);
+    -o-filter: blur(10px);
+    filter: blur(10px);
     background-position: center;
     background-position-y: top;
   }
+  // .banner::before{
+  //   content:'';
+  //   position:absolute;
+  //   top:0;
+  //   left:0;
+  //   width:600px;
+  //   height:100%;
+  //   filter:blur(10px);
+  //   z-index:-1;
+  //   background-size:cover;
+  // }
 }
 // 详情
 .songlist-details {
@@ -304,7 +329,6 @@ export default {
     top: 0;
     width: 100vw;
     height: 100%;
-    background-color: #999999;
     img {
       filter: blur(30px);
       width: 100vw;

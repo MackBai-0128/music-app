@@ -1,7 +1,7 @@
 <template>
   <div class="play-page">
-    <div class="bg-img" :class="!isLogoLyric?'is-bg-color':''">
-      <img :src="artists.picUrl" v-if="isLogoLyric" />
+    <div class="bg-img">
+      <img :src="artists.picUrl" />
     </div>
     <div class="play-container">
       <!-- nav -->
@@ -17,7 +17,7 @@
             ></i>
           </p>
         </div>
-        <i class="icon-fenxiang fenxiang"></i>
+        <i class="icon-fenxiang fenxiang" @click="onShare"></i>
       </div>
       <!-- logo -->
       <div
@@ -70,6 +70,12 @@
     <van-action-sheet title="播放列表" v-model="playListShow">
       <ActionSheet />
     </van-action-sheet>
+    <van-share-sheet
+      v-model="showShare"
+      title="立即分享给好友"
+      :options="options"
+      @select="onSelect"
+    />
   </div>
 </template>
 
@@ -97,7 +103,15 @@ export default {
       nolyric: false, // 是否有歌词
       lyricIndex: 0, // 当前播放歌词下标
       isLogoLyric: true,
-      mp3: {}
+      mp3: {},
+      showShare: false,
+      options: [
+        { name: '微信', icon: 'wechat' },
+        { name: '微博', icon: 'weibo' },
+        { name: '复制链接', icon: 'link' },
+        { name: '分享海报', icon: 'poster' },
+        { name: '二维码', icon: 'qrcode' }
+      ]
     }
   },
   components: {
@@ -139,6 +153,23 @@ export default {
     }
   },
   methods: {
+    onSelect (option) {
+      console.log(option)
+      if (option.name === '微信') {
+        window.location.href = 'weixin://'
+        // var aLink = document.createElement('a')
+        // var body = document.body
+        // aLink.href = 'weixin://'
+        // body.appendChild(aLink)
+        // aLink.click()
+      } else if (option.name === '微博') {
+        window.location.href = 'weibo://'
+      }
+    },
+    // 分享
+    onShare () {
+      this.showShare = true
+    },
     // test歌手信息
     async onArtists () {
       const { data } = await artists({ id: this.currentMusic.artists[0].id })
@@ -275,7 +306,9 @@ export default {
 
 <style scoped lang="less">
 .play-page {
+  position: relative;
   height: 100vh;
+  width: 100vw;
   overflow: hidden;
 }
 .play-container {
@@ -289,21 +322,21 @@ export default {
   background: linear-gradient(to top, #ff6a28, #fe2f57);
 }
 .bg-img {
+  width: 120vw;
+  height: 120vh;
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  left: 50%;
+  top: 50%;
+  margin-top: -60vh;
+  margin-left: -60vw;
   z-index: -1;
-  overflow: hidden;
-  background-color: rgba(0, 0, 0, 0.486);
-  background-blend-mode: darken;
+  filter: brightness(0.8);
   img {
-    height: 100vh;
-    width: 150%;
+    height: 100%;
+    width: 100%;
     // 毛玻璃
-    filter: blur(18px);
-    -webkit-filter: blur(18px);
+    -webkit-filter: blur(50px);
+    filter: blur(50px);
   }
 }
 .nav-bar {
@@ -341,6 +374,8 @@ export default {
 }
 // 封面
 .cover {
+  position: absolute;
+  top: 20vh;
   box-sizing: border-box;
   width: 200px;
   height: 200px;
@@ -359,7 +394,8 @@ export default {
 }
 
 .features {
-  height: 190px;
+  position: fixed;
+  bottom: 0;
   background-color: rgba(65, 65, 65, 0.377);
   i {
     color: #ece4e5 !important;
