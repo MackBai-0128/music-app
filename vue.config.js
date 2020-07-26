@@ -39,11 +39,15 @@ module.exports = {
       //     })
       //   ]
       // }
-      // 打包时禁止打包conlose.log
       config.optimization = {
         minimizer: [
           new TerserPlugin({
             terserOptions: {
+              // 忽略注释
+              output: {
+                comments: false
+              },
+              // 打包时禁止打包conlose.log
               compress: {
                 drop_console: true,
                 warnings: false,
@@ -111,7 +115,6 @@ module.exports = {
 
   // pagrs: {
   //   index: {
-
   //   }
   // },
   // webpack-dev-serve 相关配置
