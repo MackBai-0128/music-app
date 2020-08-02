@@ -30,16 +30,7 @@ module.exports = {
   },
   configureWebpack: config => {
     if (process.env.NODE_ENV === 'production') {
-      // GZIP压缩
-      return {
-        plugins: [new CompressionPlugin({
-          test: /\.(js|css)(\?.*)?$/i, // 需要压缩的文件正则
-          threshold: 10240, // 文件超过10k的数据进行压缩
-          deleteOriginalAssets: false // 是否删除原文件
-        })]
-      }
-    }
-    if (process.env.NODE_ENV === 'production') {
+      // 打包忽略项
       config.optimization = {
         minimizer: [new TerserPlugin({
           terserOptions: {
@@ -53,6 +44,14 @@ module.exports = {
               pure_funcs: ['console.log']
             }
           }
+        })]
+      }
+      // GZIP压缩
+      return {
+        plugins: [new CompressionPlugin({
+          test: /\.(js|css)(\?.*)?$/i, // 需要压缩的文件正则
+          threshold: 10240, // 文件超过10k的数据进行压缩
+          deleteOriginalAssets: false // 是否删除原文件
         })]
       }
     }
