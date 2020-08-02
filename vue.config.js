@@ -1,5 +1,6 @@
 // const path = require('path')
 const TerserPlugin = require('terser-webpack-plugin')
+const CompressionPlugin = require('compression-webpack-plugin')
 module.exports = {
   // 基本路径
   publicPath: process.env.NODE_ENV === 'production' ? './' : './',
@@ -30,33 +31,29 @@ module.exports = {
   configureWebpack: config => {
     if (process.env.NODE_ENV === 'production') {
       // GZIP压缩
-      // return {
-      //   plugins: [
-      //     new CompressionWebpackPlugin({
-      //       test: /\.(js|css)(\?.*)?$/i, //需要压缩的文件正则
-      //       threshold: 10240, //文件大小大于这个值时启用压缩
-      //       deleteOriginalAssets: false //压缩后保留原文件
-      //     })
-      //   ]
-      // }
+      return {
+        plugins: [new CompressionPlugin({
+          test: /\.(js|css)(\?.*)?$/i, // 需要压缩的文件正则
+          threshold: 10240, // 文件超过10k的数据进行压缩
+          deleteOriginalAssets: false // 是否删除原文件
+        })]
+      }
+    }
+    if (process.env.NODE_ENV === 'production') {
       config.optimization = {
-        minimizer: [
-          new TerserPlugin({
-            terserOptions: {
-              // 忽略注释
-              output: {
-                comments: false
-              },
-              // 打包时禁止打包conlose.log
-              compress: {
-                drop_console: true,
-                warnings: false,
-                drop_debugger: true,
-                pure_funcs: ['console.log']
-              }
+        minimizer: [new TerserPlugin({
+          terserOptions: {
+            // 忽略注释
+            output: { comments: false },
+            // 打包时禁止打包conlose.log
+            compress: {
+              drop_console: true,
+              warnings: false,
+              drop_debugger: true,
+              pure_funcs: ['console.log']
             }
-          })
-        ]
+          }
+        })]
       }
     }
     // config.resolve = { // 配置解析别名
