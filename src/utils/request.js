@@ -9,9 +9,11 @@
 import axios from 'axios'
 axios.defaults.withCredentials = true
 const request = axios.create({
-  baseURL: '/api',
+  baseURL: process.env.VUE_APP_APISERVE,
+  // baseURL: 'http://localhost:3000',
   timeout: 15000,
-  headers: { 'X-Real-IP': '192.168.0.106' }
+  withCredentials: true,
+  headers: { 'X-Real-IP': '211.161.244.70' }
 })
 // 请求
 request.interceptors.request.use(

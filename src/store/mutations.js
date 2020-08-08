@@ -1,5 +1,5 @@
 
-import { setItem } from '@/utils/storage'
+import { setItem, remItem } from '@/utils/storage'
 import * as types from './mutations-types'
 
 const mutations = {
@@ -7,14 +7,15 @@ const mutations = {
   [types.setActiveIndex] (state, i) {
     state.activeIndex = i
   },
-  // token
-  [types.setLoginStatus] (state, data) {
-    state.loginStatus = data
-  },
   // 用户信息
   [types.setUserInfo] (state, data) {
     state.profile = data
-    setItem('profile', state.profile)
+    if (data === null) {
+      remItem('profile')
+    } else {
+      setItem('profile', state.profile)
+    }
+    console.log('用户信息', data)
   },
   // 播放列表 接收数组
   [types.setPlayList] (state, data) {

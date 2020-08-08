@@ -23,7 +23,7 @@
       <div class="sy-five-money">首页仅5元</div>
     </div>
     <div class="login">
-      <div class="login-btn" v-if="!loginStatus">
+      <div class="login-btn" v-if="profile === null">
         <p>手机电脑多端同步，尽享海量高品质音乐</p>
         <van-button
           size="small"
@@ -72,16 +72,18 @@ export default {
       if (data.code === 200) {
         this.$toast('退出成功')
         removeToken('music-token')
+        this.setUserInfo(null)
       }
     },
     ...mapMutations({
-      setMusicToken: 'setMusicToken'
+      setMusicToken: 'setMusicToken',
+      setUserInfo: 'setUserInfo'
     })
   },
   created () {},
   mounted () {},
   computed: {
-    ...mapGetters(['loginStatus', 'artists', 'currentMusic', 'maxTime', 'currentTime', 'profile']),
+    ...mapGetters(['artists', 'currentMusic', 'maxTime', 'currentTime', 'profile']),
     currentRate: {
       get () {
         return (this.currentTime / this.maxTime) * 100

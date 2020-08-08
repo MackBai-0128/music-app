@@ -1,6 +1,27 @@
 // const path = require('path')
 const TerserPlugin = require('terser-webpack-plugin')
-const CompressionPlugin = require('compression-webpack-plugin')
+// const CompressionPlugin = require('compression-webpack-plugin')
+// 是否为生产环境
+// const isProduction = process.env.NODE_ENV !== 'development'
+// 是使用cdn
+// const needCdn = false
+// 是否压缩文件
+// const isZip = false
+// CDN
+// const cdn = {
+//   // cdn：模块名称和模块作用域命名（对应window里面挂载的变量名称）
+//   externals: {
+//     vue: 'Vue',
+//     vuex: 'Vuex'
+//   },
+//   // cdn的css链接
+//   css: [],
+//   // cdn的js链接
+//   js: [
+//     'https://cdn.staticfile.org/vue/2.6.10/vue.min.js',
+//     'https://cdn.staticfile.org/vuex/3.0.1/vuex.min.js'
+//   ]
+// }
 module.exports = {
   // 基本路径
   publicPath: process.env.NODE_ENV === 'production' ? './' : './',
@@ -12,20 +33,38 @@ module.exports = {
   // indexPath: 'index.html',
   // 生成的静态资源在它们的文件名中包含了 hash 以便更好的控制缓存
   filenameHashing: true,
-  // eslint-loader 是否在保存的时候检查
+  // eslint-loader 是否在保存的时候检查/是否开启ESlint
   lintOnSave: true,
   /**
    * webpack配置，see https://github.com/vuejs/vue-cli/blob/d7acff56a44cc53be743916409ca6a731dd6af20/docs/zh/guide/webpack.md
    */
   chainWebpack: config => {
-    // const imagesRule = config.module.rule('images')
-    // imagesRule
-    //   .use('url-loader')
-    //   .loader('url-loader')
-    //   .tap(options => Object.assign(options, { limit: 6144 }))
+    // 在路由中用懒加载时，webpack默认有预加载此设置是关闭预加载
+    // config.plugins.delete('preload')
+    // config.plugins.delete('prefetch')
+    // 压缩图片
+    //  config.module
+    //   .rule('images')
+    //   .use('image-webpack-loader')
+    //   .loader('image-webpack-loader')
+    //   .options({ bypassOnDebug: true })
+    //   .end()
+    // 设置别名
+    // config.resolve.alias
+    // .set('@', path.resolve(__dirname, './src'))
+    // .set('@V', path.resolve(__dirname, './src/views'))
+    // .set('@I', path.resolve(__dirname, './src/assets/img'))
+    // .set('@F', path.resolve(__dirname, './src/shujudata/public.js'))
+    // .set('@H', path.resolve(__dirname, './src/shujudata/https.js'))
+    // .set('@R', path.resolve(__dirname, './src/router'))
+    // .set('@S', path.resolve(__dirname, './src/store'))
+    // .set('@C', path.resolve(__dirname, './src/components/comm'))
+    // .set('@U', path.resolve(__dirname, './src/shujudata/severUrl.js'))
 
-    // config.when(process.env.NODE_ENV === 'production', config => {
-    //   config.set('exte')
+    // 生产环境或本地需要cdn时，才注入cdn
+    // config.plugin('html').tap(args => {
+    //   if (needCdn) args[0].cdn = cdn
+    //   return args
     // })
   },
   configureWebpack: config => {
@@ -47,13 +86,13 @@ module.exports = {
         })]
       }
       // GZIP压缩
-      return {
-        plugins: [new CompressionPlugin({
-          test: /\.(js|css)(\?.*)?$/i, // 需要压缩的文件正则
-          threshold: 10240, // 文件超过10k的数据进行压缩
-          deleteOriginalAssets: false // 是否删除原文件
-        })]
-      }
+      // return {
+      //   plugins: [new CompressionPlugin({
+      //     test: /\.(js|css)(\?.*)?$/i, // 需要压缩的文件正则
+      //     threshold: 10240, // 文件超过10k的数据进行压缩
+      //     deleteOriginalAssets: false // 是否删除原文件
+      //   })]
+      // }
     }
     // config.resolve = { // 配置解析别名
     //   extensions: ['.js', '.json', '.vue'],
@@ -113,10 +152,10 @@ module.exports = {
   //   index: {
   //   }
   // },
-  // webpack-dev-serve 相关配置
+  // webpack-dev-serve 服务器相关配置
   devServer: {
     open: true, // 编译完是否打开网页
-    // host: 'localhost', // 指定使用地址，默认localhost,0.0.0.0代表可以被外界访问
+    // host: '192.168.0.108:3000', // 指定使用地址，默认localhost,0.0.0.0代表可以被外界访问
     port: 9625, // 访问端口
     https: false, // 编译失败时刷新页面
     hot: true, // 开启热加载
@@ -124,12 +163,12 @@ module.exports = {
     // 设置代理
     proxy: { // 配置跨域
       '/api': {
-        target: 'http://localhost:3000', // 代理地址，这里设置的地址会代替axios中设置的baseURL
-        // ws: true, // proxy websockets
+        target: 'http://192.168.0.108:3000', // 代理地址，这里设置的地址会代替axios中设置的baseURL
+        ws: true, // proxy websockets
         changOrigin: true, // 允许跨域
         // pathRewrite 方法重写 url
         pathRewrite: {
-          '^/api': '/'// 请求的时候使用这个api就可以
+          '^/api': ''// 请求的时候使用这个api就可以
           // pathRewrite: {'^/api': '/'} 重写之后url为 http://localhost:3000/xxxx
           // pathRewrite: {'^/api': '/api'} 重写之后url为 http://localhost:3000/api/xxxx
         }
@@ -146,5 +185,18 @@ module.exports = {
   /**
    * 第三方插件配置
    */
-  pluginOptions: {}
+  pluginOptions: {
+    /**
+     * 引入style-resources-loader插件
+     * less引入与sass引入方法不一样
+     * 需要style-resources-loader 和 vue-cli-plugin-style-resources-loader两个插件才能引入成功
+     * 注意这里引入less文件时不能用别名引入
+     */
+    // 'style-resources-loader': {
+    //   preProcessor: 'less',
+    //   patterns: [
+    //     path.resolve(__dirname, './src/styles/index.less')
+    //   ]
+    // }
+  }
 }

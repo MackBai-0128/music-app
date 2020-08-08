@@ -13,6 +13,7 @@
 import firstLoad from './views/first-load'
 import { status, refresh } from '@/api/login'
 import { mapMutations } from 'vuex'
+import { removeToken } from '@/utils/util'
 export default {
   data () {
     return {
@@ -36,7 +37,6 @@ export default {
   },
   methods: {
     ...mapMutations({
-      setLoginStatus: 'setLoginStatus',
       setUserInfo: 'setUserInfo'
     }),
     // 刷新登录
@@ -48,13 +48,14 @@ export default {
       try {
         const res = await status()
         if (res.statusText === 'OK') {
-          this.setLoginStatus(true)
           this.setUserInfo(res.data.profile)
         } else {
           this.setUserInfo(null)
         }
       } catch (error) {
         console.log('未登录', error.response)
+        removeToken('music-token')
+        this.setUserInfo(null)
       }
     },
     timeOut () {

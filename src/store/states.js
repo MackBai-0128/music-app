@@ -9,8 +9,8 @@ const state = {
   isPlay: false, // 播放状态
   currentTime: 0, // 当前播放时间
   maxTime: 0, // 歌曲长度
-  profile: getItem('profile') ? getItem('profile') : null, // 用户信息
-  loginStatus: null
+  profile: getItem('profile') ? getItem('profile') : null // 用户信息
+  // loginStatus: null
 }
 
 export default state
