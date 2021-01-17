@@ -156,14 +156,14 @@ module.exports = {
   devServer: {
     open: true, // 编译完是否打开网页
     // host: '192.168.0.108:3000', // 指定使用地址，默认localhost,0.0.0.0代表可以被外界访问
-    port: 9625, // 访问端口
+    port: 3000, // 访问端口
     https: false, // 编译失败时刷新页面
     hot: true, // 开启热加载
     hotOnly: false,
     // 设置代理
     proxy: { // 配置跨域
       '/api': {
-        target: 'http://192.168.0.108:3000', // 代理地址，这里设置的地址会代替axios中设置的baseURL
+        target: 'http://192.168.0.117:8989', // 代理地址，这里设置的地址会代替axios中设置的baseURL
         ws: true, // proxy websockets
         changOrigin: true, // 允许跨域
         // pathRewrite 方法重写 url
