@@ -16,7 +16,7 @@
     "core-js": "^3.6.4",
     "fs": "0.0.1-security",
     "js-cookie": "^2.2.1",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.21",
     "lyric-parser": "^1.0.1",
     "muse-ui": "3.0.2",
     "path": "^0.12.7",
